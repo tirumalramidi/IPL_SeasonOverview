@@ -1,4 +1,24 @@
 .rowDivision {
-    width: 2000px;
-    height: 2000px;
+    width: 700px;
+    height: 600px;
+}
+
+.sorting {
+    background: black;
+    color: white;
+}
+
+.sortable {
+    user-select: none;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 6px;
+}
+
+.sortable:hover {
+    background: #d1d1d1;
+}
+
+.sortable.sorting:hover {
+    background: #232323;
 }

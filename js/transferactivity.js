@@ -1,17 +1,25 @@
-let tableMargin = {top: 20, right: 10, bottom: 20, left: 10}
-let tableTotalWidth = 466
-let figureWidth = tableTotalWidth-tableMargin.left-tableMargin.right
-let gapPercent = 0.06*figureWidth
-let remainingWidth = figureWidth-(4*gapPercent)
+let tableMargin = {
+    top: 20,
+    right: 10,
+    bottom: 20,
+    left: 10
+}
 
-let nameWidth = remainingWidth*0.30
-let acquiredWidth = remainingWidth*0.15
-let costWidth = remainingWidth*0.15
-let formerWidth = remainingWidth*0.40
+let tableTotalWidth = 700
+let figureWidth = tableTotalWidth - tableMargin.left - tableMargin.right
+let gapPercent = 0.06 * figureWidth
+let remainingWidth = figureWidth - (4 * gapPercent)
+
+let playerWidth = remainingWidth * 0.30
+let draftWidth = remainingWidth * 0.15
+let priceWidth = remainingWidth * 0.15
+let previousTeamWidth = remainingWidth * 0.40
 
 defaultTeam = "Sunrisers Hyderabad"
 
-let tableDrawnYet = false
+let tableDrawn = false
+
+let filteredObject = []
 
 generateTable = (wordsObject) => {
     
@@ -21,52 +29,56 @@ generateTable = (wordsObject) => {
 
     let columnHeaders = d3.select('#columnHeaders')
 
-    let filteredObject = wordsObject.filter(
+    filteredObject = wordsObject.filter(
        data => data['team'] === defaultTeam 
     )
 
-    if (!tableDrawnYet){
+    if (!tableDrawn){
         columnHeaders.append('th')
-            .attr('id', 'nameHeader')
-            .attr('width', nameWidth)
-            .text('Player Name')
+            .attr('id', 'playerHeader')
+            .attr('width', playerWidth)
+            .text('Players')
             .attr('class', 'sortable')
+            .style('padding-left', gapPercent+'px')
             .style('padding-right', gapPercent+'px')
             .style('text-align', 'center')
             .append('i')
             .attr('class', 'fas no-display')
 
         columnHeaders.append('th')
-            .attr('id', 'acquiredHeader')
-            .attr('width', acquiredWidth)
+            .attr('id', 'draftHeader')
+            .attr('width', draftWidth)
             .text('Acquired')
             .attr('class', 'sortable')
+            .style('padding-left', gapPercent+'px')
             .style('padding-right', gapPercent+'px')
             .style('text-align', 'center')
             .append('i')
             .attr('class', 'fas no-display')
 
         columnHeaders.append('th')
-            .attr('id', 'costHeader')
-            .attr('width', costWidth)
-            .text('Cost in USD')
+            .attr('id', 'priceHeader')
+            .attr('width', priceWidth)
+            .text('Cost')
             .attr('class', 'sortable')
+            .style('padding-left', gapPercent+'px')
             .style('padding-right', gapPercent+'px')
             .style('text-align', 'center')
             .append('i')
             .attr('class', 'fas no-display')
 
         columnHeaders.append('th')
-            .attr('id', 'formerHeader')
-            .attr('width', formerWidth)
+            .attr('id', 'previousTeamHeader')
+            .attr('width', previousTeamWidth)
             .text('Former Team')
             .attr('class', 'sortable')
+            .style('padding-left', gapPercent+'px')
             .style('padding-right', gapPercent+'px')
             .style('text-align', 'center')
             .append('i')
             .attr('class', 'fas no-display')
 
-        tableDrawnYet = true
+        tableDrawn = true
 
     }
     
@@ -82,58 +94,95 @@ generateTable = (wordsObject) => {
     let individualTableRow = tableData
         .enter().append('tr')
     
-    let nameElements = individualTableRow
+    let playerElements = individualTableRow
         .append('td')
-        .attr('width', nameWidth)
+        .attr('width', playerWidth)
         .text(d => d['player'])
         .style('vertical-align', 'middle')
         .style('font-size', '14px')
+        .style('text-align', 'left')
+        .style('padding-top', gapPercent/16+'px')
+        .style('padding-left', gapPercent/4+'px')
+        .style('padding-bottom', gapPercent/16+'px')
+        .style('background-color', function(d){
+            if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
+                return 'yellow';
+            }
+            return 'orange';
+        })
 
-    let acquiredElements = individualTableRow
+    let draftElements = individualTableRow
         .append('td')
-        .attr('width', acquiredWidth)
+        .attr('width', draftWidth)
         .text(d => d['draft'])
         .style('vertical-align', 'middle')
         .style('font-size', '14px')
+        .style('text-align', 'center')
+        .style('padding-top', gapPercent/16+'px')
+        .style('padding-left', gapPercent/4+'px')
+        .style('padding-bottom', gapPercent/16+'px')
+        .style('background-color', function(d){
+            if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
+                return 'yellow';
+            }
+            return 'orange';
+        })
 
-    let costElements = individualTableRow
+    let priceElements = individualTableRow
         .append('td')
-        .attr('width', costWidth)
+        .attr('width', priceWidth)
         .text(d => d['price'])
         .style('vertical-align', 'middle')
         .style('font-size', '14px')
+        .style('text-align', 'center')
+        .style('padding-top', gapPercent/16+'px')
+        .style('padding-left', gapPercent/4+'px')
+        .style('padding-bottom', gapPercent/16+'px')
+        .style('background-color', function(d){
+            if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
+                return 'yellow';
+            }
+            return 'orange';
+        })
 
-    let formerElements = individualTableRow
+    let previousTeamElements = individualTableRow
         .append('td')
-        .attr('width', formerWidth)
+        .attr('width', previousTeamWidth)
         .text(d => d['previousTeam'])
         .style('vertical-align', 'middle')
-        .style('font-size', '16px')
-        .style('text-align', 'right')
-   
-
+        .style('font-size', '14px')
+        .style('text-align', 'left')
+        .style('padding-top', gapPercent/16+'px')
+        .style('padding-left', gapPercent/4+'px')
+        .style('padding-bottom', gapPercent/16+'px')
+        .style('background-color', function(d){
+            if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
+                return 'yellow';
+            }
+            return 'orange';
+        })
 }
+
 headerData = [
     {
         sorted: false,
         ascending: false,
-        key: 'name'
+        key: 'player'
     },
     {
         sorted: false,
         ascending: false,
-        key: 'acquired'
+        key: 'draft'
     },
     {
         sorted: false,
         ascending: false,
-        key: 'cost',
-        alterFunc: d => +d
+        key: 'price'
     },
     {
         sorted: false,
         ascending: false,
-        key: 'former'
+        key: 'previousTeam'
     }
 ]
 
@@ -155,12 +204,12 @@ function attachSortHandlers() {
             .selectAll('th')
             .classed('sorting', false)
             .selectAll('i')
-                .attr('class', 'fas no-display')
+            .attr('class', 'fas no-display')
 
         d3.select('#'+d.key+'Header')
             .classed('sorting', true)
             .select('i')
-                .attr('class', 'fas '+(d.ascending ? 'fa-sort-up' : 'fa-sort-down'))
+            .attr('class', 'fas '+(d.ascending ? 'fa-sort-up' : 'fa-sort-down'))
 
         let sortData = (a,b) => {
             a = d.alterFunc ? d.alterFunc(a[d.key]) : a[d.key]
@@ -170,7 +219,8 @@ function attachSortHandlers() {
 
         let rowSelection = d3.select('#predictionTableBody')
                 .selectAll('tr')
-                .sort(sortData) 
+                .sort(sortData)
+
         filteredObject = filteredObject.sort(sortData)
     })   
 }
