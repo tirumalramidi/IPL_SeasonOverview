@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://d3js.org/d3-force.v2.min.js"></script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="js/linechart.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/scatterplot.js"></script>
+    <script src="js/scorecard.js"></script>
+    <script src="js/selection.js"></script>
+    <script src="js/transferactivity.js"></script>
+
+
+</head>
+
+<body style="padding-left: 20px">
+    <div id="header-wrap">
+        <div style="display:flex; width:1400px; padding-top: 25px">
+            <div style="flex-grow: 4; flex-basis: 0">
+                <div>
+                    <h1 style="margin-top:0">Political Speeches</h1>
+                    <div>Name: Sai Krishna Dontaraju; E-Mail: u1426879@utah.edu; UID: u1426879</div>
+                </div>
+            </div>
+            <div style="flex-grow: 5; flex-basis: 0; margin-top: 15px">
+
+                <!-- <div>
+                    Below are statistics that display which party leaned more towards a particular topic and it also
+                    shows topics that they both agree.
+                    Scatterplot showcases the their leanings and the table on right provides more data. The table is
+                    <strong>Sortable</strong> by clicking on the headers
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="rowDivision">
+            <div class="chart">
+                <h2>Scatter Plot</h2>
+                <div id="scatterPlot">
+                </div>
+              </div>
+              <div class="chart">
+                <h2>Transfer</h2>
+                <div id="table">
+                    <div id="second-row" style="display:flex; margin-top: 15px" class="wrapper">
+                        <div id="bubble-swarm" style="flex-grow: 2"></div>
+                        <table id="table-element" style="flex-grow: 1">
+                            <thead id="predictionTableHead">
+                
+                            </thead>
+                            <tbody id="predictionTableBody" style="line-height:1">
+                
+                            </tbody>
+                        </table>
+                
+                    </div>
+                </div>
+              </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
