@@ -49,9 +49,9 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
     }
     //console.log("masterArray", masterArray)
 
-    //generateTeams()
-    //generateScatterPlot(masterArray)
-    //generateTable(masterArray)
-    //attachSortHandlers()
+    generateTeams()
+    generateScatterPlot(masterArray)
+    generateTable(masterArray)
+    attachSortHandlers()
     generatePoints(data[4])
 })
