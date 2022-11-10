@@ -1,4 +1,9 @@
 .rowDivision {
+    width: 1500px;
+    height: 700px;
+}
+
+.chart{
     width: 700px;
     height: 600px;
 }

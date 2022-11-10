@@ -19,7 +19,7 @@
 
 <body style="padding-left: 20px">
     <div>
-        <div class="rowDivision">
+        <div class="rowDivision" style="display:flex; margin-top: 15px" >
             <div class="chart">
                 <h2>Teams</h2>
                 <div id="teams"></div>
@@ -28,11 +28,13 @@
                 <h2>Scatter Plot</h2>
                 <div id="scatterPlot"></div>
             </div>
+        </div>
+        <div class="rowDivision">
             <div class="chart">
                 <h2>Transfer</h2>
                 <div id="table">
-                    <div id="second-row" style="display:flex; margin-top: 15px" class="wrapper">
-                        <div id="bubble-swarm" style="flex-grow: 2"></div>
+                    <!-- <div id="second-row" style="display:flex; margin-top: 15px" class="wrapper"> -->
+                        <!-- <div id="bubble-swarm" style="flex-grow: 2"></div> -->
                         <table id="table-element" style="flex-grow: 1">
                             <thead id="predictionTableHead">
                             </thead>
@@ -40,7 +42,7 @@
                             </tbody>
                         </table>
 
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>
