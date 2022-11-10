@@ -10,7 +10,7 @@ Promise.all([auctionData, battingData, bowlingData]).then( data => {
                 tempObject["player"] = data[0][row]["Player"]
                 tempObject["team"] = data[0][row].Team
                 tempObject["previousTeam"] = data[0][row]["2021 Squad"]
-                tempObject["draft"] = data[0][row]["Retained / Draft Pick"]
+                tempObject["draft"] = data[0][row]["Retained / Draft Pick"] == 'Retained' || data[0][row]["Retained / Draft Pick"] == 'Draft Pick' ? data[0][row]["Retained / Draft Pick"] : 'Bought'
                 tempObject["price"] = data[0][row]["Cost"]
 
                 battingObject = data[1].filter(batting => batting['Player'] == data[0][row]['Player'])
@@ -45,6 +45,6 @@ Promise.all([auctionData, battingData, bowlingData]).then( data => {
             }
             console.log("masterArray",masterArray)
     generateScatterPlot(masterArray);
-    generateTable(data[0])
+    generateTable(masterArray)
 
 })

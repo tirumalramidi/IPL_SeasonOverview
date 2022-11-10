@@ -9,15 +9,21 @@ let acquiredWidth = remainingWidth*0.15
 let costWidth = remainingWidth*0.15
 let formerWidth = remainingWidth*0.40
 
+defaultTeam = "Sunrisers Hyderabad"
+
 let tableDrawnYet = false
 
-generateTable = (wordsObject) => { 
+generateTable = (wordsObject) => {
     
     d3.select('#predictionTableHead')
         .append('tr')
         .attr('id', 'columnHeaders')
 
     let columnHeaders = d3.select('#columnHeaders')
+
+    let filteredObject = wordsObject.filter(
+       data => data['team'] === defaultTeam 
+    )
 
     if (!tableDrawnYet){
         columnHeaders.append('th')
@@ -66,8 +72,8 @@ generateTable = (wordsObject) => {
     
     let tableData = d3.select('#predictionTableBody')
         .selectAll('tr')
-        .data(wordsObject)
-        
+        .data(filteredObject)
+       
      
     tableData.exit().remove()
 
@@ -79,28 +85,28 @@ generateTable = (wordsObject) => {
     let nameElements = individualTableRow
         .append('td')
         .attr('width', nameWidth)
-        .text(d => d['name'])
+        .text(d => d['player'])
         .style('vertical-align', 'middle')
         .style('font-size', '14px')
 
     let acquiredElements = individualTableRow
         .append('td')
         .attr('width', acquiredWidth)
-        .text(d => d['acquired'])
+        .text(d => d['draft'])
         .style('vertical-align', 'middle')
         .style('font-size', '14px')
 
     let costElements = individualTableRow
         .append('td')
         .attr('width', costWidth)
-        .text(d => d['cost'])
+        .text(d => d['price'])
         .style('vertical-align', 'middle')
         .style('font-size', '14px')
 
     let formerElements = individualTableRow
         .append('td')
         .attr('width', formerWidth)
-        .text(d => d['former'])
+        .text(d => d['previousTeam'])
         .style('vertical-align', 'middle')
         .style('font-size', '16px')
         .style('text-align', 'right')
@@ -165,6 +171,6 @@ function attachSortHandlers() {
         let rowSelection = d3.select('#predictionTableBody')
                 .selectAll('tr')
                 .sort(sortData) 
-        wordsObject = wordsObject.sort(sortData)
+        filteredObject = filteredObject.sort(sortData)
     })   
 }
