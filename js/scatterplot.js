@@ -1,7 +1,67 @@
 generateScatterPlot = (data) => {
 
-    teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
-    teamColors = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
+    let selectXData = [
+        {"text": "Average"},
+        {"text": "Innings"},
+        {"text": "Matches"},
+        {"text": "Not Out"},
+        {"text": "Runs"},
+        {"text": "Balls Faced"},
+        {"text": "Strike Rate"},
+        {"text": "Centuries"},
+        {"text": "Fifties"},
+        {"text": "Fours"},
+        {"text": "Sixes"}
+    ]
+
+    let selectYData = [
+        {"text": "Runs"},
+        {"text": "Innings"},
+        {"text": "Matches"},
+        {"text": "Not Out"},
+        {"text": "Average"},
+        {"text": "Balls Faced"},
+        {"text": "Strike Rate"},
+        {"text": "Centuries"},
+        {"text": "Fifties"},
+        {"text": "Fours"},
+        {"text": "Sixes"}
+    ]
+
+    let body = d3.select('#scatterPlot')
+
+    var span = body.append('span')
+        .text('X-Axis Variable: ')
+
+    var yInput = body.append('select')
+        .attr('id', 'xSelect')
+        .on('change', xChange)
+        .selectAll('option')
+        .data(selectXData)
+        .enter()
+        .append('option')
+        .attr('value', function (d) { return d.text })
+        .text(function (d) { return d.text; })
+
+    body.append('br')
+
+    var span = body.append('span')
+        .text('Y-Axis Variable: ')
+
+    var yInput = body.append('select')
+        .attr('id', 'ySelect')
+        .on('change', yChange)
+        .selectAll('option')
+        .data(selectYData)
+        .enter()
+        .append('option')
+        .attr('value', function (d) { return d.text })
+        .text(function (d) { return d.text; })
+
+    body.append('br')
+
+    let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
+    let teamColors = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
 
     let margin = {
         top: 20,
@@ -20,7 +80,7 @@ generateScatterPlot = (data) => {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    let x = d3.scaleLinear()
+    let xScale = d3.scaleLinear()
         .domain([0, d3.max(
             data.map(
                 d => d["batAverage"]
@@ -28,19 +88,19 @@ generateScatterPlot = (data) => {
         )])
         .range([0, width]);
 
-    svg.append("g")
+    let xAxis = svg.append("g")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x))
+        .call(d3.axisBottom(xScale))
         .style("font-size", "12px");
 
-    let y = d3.scaleLinear()
+    let yScale = d3.scaleLinear()
         .domain([0, d3.max(
             data.map(d => d["runs"])
         )])
         .range([height, 0]);
 
-    svg.append("g")
-        .call(d3.axisLeft(y))
+    let yAxis = svg.append("g")
+        .call(d3.axisLeft(yScale))
         .style("font-size", "12px");
 
     let color = d3.scaleOrdinal()
@@ -53,12 +113,40 @@ generateScatterPlot = (data) => {
         .enter()
         .append("circle")
         .attr("cx", function (d) {
-            return x(d["batAverage"]) != '' ? x(d["batAverage"]) : 0;
+            return xScale(d["batAverage"]) != '' ? xScale(d["batAverage"]) : 0;
         })
         .attr("cy", function (d) {
-            return y(d["batAverage"]) != '' ? y(d["runs"]) : 0;
+            return yScale(d["batAverage"]) != '' ? yScale(d["runs"]) : 0;
         })
         .attr("r", 6.0)
         .style("fill", function (d) { return color(d['team']) })
         .style('stroke', 'black');
+
+    function yChange() {
+        var value = this.value
+        yScale.domain([0, d3.max(
+            data.map(
+                d => d[value]
+            )
+        )])
+        yAxis.scale(yScale)
+        d3.select('#yAxis')
+            .call(yAxis)
+        d3.select('#yAxisLabel')
+            .text(value)
+    }
+
+    function xChange() {
+        var value = this.value
+        xScale.domain([0, d3.max(
+            data.map(
+                d => d[value]
+            )
+        )])
+        xAxis.scale(xScale)
+        d3.select('#xAxis')
+            .call(xAxis)
+        d3.select('#xAxisLabel')
+            .text(value)
+    }
 }

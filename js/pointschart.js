@@ -1,5 +1,30 @@
 generatePoints = (data) => {
 
+    let selectData = [
+        {"text": "Position"},
+        {"text": "Net Run Rate"},
+        {"text": "Wins"},
+        {"text": "Points"},
+        {"text": "Percentage of Max Points"}
+    ]
+
+    let body = d3.select('#pointsHistory')
+
+    var span = body.append('span')
+        .text('What to display on Y-Axis: ')
+
+    var yInput = body.append('select')
+        .attr('id', 'xSelect')
+        .selectAll('option')
+        .data(selectData)
+        .enter()
+        .append('option')
+        .attr('value', function (d) { return d.text })
+        .text(function (d) { return d.text; })
+
+    body.append('br')
+    body.append('br')
+
     console.log(data)
 
     var smargin = { top: 10, right: 30, bottom: 30, left: 60 },
@@ -23,14 +48,16 @@ generatePoints = (data) => {
 
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).ticks(10));
+        .call(d3.axisBottom(x).ticks(10))
+        .style("font-size", "12px");
 
     var y = d3.scaleLinear()
         .domain([d3.max(data, function (d) { return +d.Position; }), 1])
         .range([height, 0]);
 
     svg.append("g")
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y))
+        .style("font-size", "12px");
 
     var res = sumstat.map(function (d) { return d.key })
 
