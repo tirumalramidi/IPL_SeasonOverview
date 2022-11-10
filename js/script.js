@@ -1,8 +1,11 @@
 auctionData = d3.csv("./data/AuctionData.csv")
 battingData = d3.csv("./data/BattingStatistics.csv")
 bowlingData = d3.csv("./data/BowlingStatistics.csv")
+scorecardData = d3.csv("./data/BallByBall.csv")
 
 Promise.all([auctionData, battingData, bowlingData]).then(data => {
+
+    console.log(scorecardData)
 
     masterArray = []
 
@@ -43,8 +46,10 @@ Promise.all([auctionData, battingData, bowlingData]).then(data => {
         masterArray.push(tempObject);
 
     }
-    console.log("masterArray", masterArray)
+    //console.log("masterArray", masterArray)
+
     generateTeams()
+    generateScorecard()
     generateScatterPlot(masterArray)
     generateTable(masterArray)
     attachSortHandlers()
