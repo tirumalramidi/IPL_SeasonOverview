@@ -1,27 +1,27 @@
-let tableMargin = {
-    top: 20,
-    right: 10,
-    bottom: 20,
-    left: 10
-}
-
-let tableTotalWidth = 700
-let figureWidth = tableTotalWidth - tableMargin.left - tableMargin.right
-let gapPercent = 0.06 * figureWidth
-let remainingWidth = figureWidth - (4 * gapPercent)
-
-let playerWidth = remainingWidth * 0.30
-let draftWidth = remainingWidth * 0.15
-let priceWidth = remainingWidth * 0.15
-let previousTeamWidth = remainingWidth * 0.40
-
-defaultTeam = "Sunrisers Hyderabad"
-
-let tableDrawn = false
-
 let filteredObject = []
 
 generateTable = (wordsObject) => {
+
+    let margin = {
+        top: 20,
+        right: 10,
+        bottom: 20,
+        left: 10
+    }
+    
+    let tableTotalWidth = 700
+    let figureWidth = tableTotalWidth - margin.left - margin.right
+    let gapPercent = 0.06 * figureWidth
+    let remainingWidth = figureWidth - (4 * gapPercent)
+    
+    let playerWidth = remainingWidth * 0.30
+    let draftWidth = remainingWidth * 0.15
+    let priceWidth = remainingWidth * 0.15
+    let previousTeamWidth = remainingWidth * 0.40
+    
+    defaultTeam = "Sunrisers Hyderabad"
+    
+    let tableDrawn = false
     
     d3.select('#predictionTableHead')
         .append('tr')

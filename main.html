@@ -9,7 +9,7 @@
     <script src="https://d3js.org/d3-force.v2.min.js"></script>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="js/linechart.js"></script>
+    <script src="js/pointschart.js"></script>
     <script src="js/script.js"></script>
     <script src="js/scatterplot.js"></script>
     <script src="js/scorecard.js"></script>
@@ -19,37 +19,30 @@
 
 <body style="padding-left: 20px">
     <div>
-        <div class="rowDivision" style="display:flex; margin-top: 15px" >
-            <div class="chart">
+        <div class="rowDivision" style="display:flex; margin-top: 15px">
+            <div id="my_dataviz"></div>
+            <!-- <div class="chart">
                 <h2>Teams</h2>
                 <div id="teams"></div>
             </div>
             <div class="chart">
                 <h2>Scatter Plot</h2>
                 <div id="scatterPlot"></div>
-            </div>
+            </div> -->
         </div>
-        <div class="rowDivision">
+        <!-- <div class="rowDivision">
             <div class="chart">
                 <h2>Transfer</h2>
                 <div id="table">
-                    <!-- <div id="second-row" style="display:flex; margin-top: 15px" class="wrapper"> -->
-                        <!-- <div id="bubble-swarm" style="flex-grow: 2"></div> -->
-                        <table id="table-element" style="flex-grow: 1">
-                            <thead id="predictionTableHead">
-                            </thead>
-                            <tbody id="predictionTableBody" style="line-height:1">
-                            </tbody>
-                        </table>
-
-                    <!-- </div> -->
-                </div>
-                <div class="chart">
-                    <h2>Scorecard</h2>
-                    <div id="scorecard"></div>
+                    <table id="table-element" style="flex-grow: 1">
+                        <thead id="predictionTableHead">
+                        </thead>
+                        <tbody id="predictionTableBody" style="line-height:1">
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
 </body>
