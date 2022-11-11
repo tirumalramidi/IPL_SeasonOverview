@@ -1,5 +1,7 @@
 generatePoints = (data) => {
 
+    console.log('hello')
+
     let selectData = [
         {"text": "Position"},
         {"text": "Net Run Rate"},

@@ -98,5 +98,5 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
     generateTable(masterArray)
     attachSortHandlers()
     render(finalScoreSheet);
-    // generatePoints(data[4])
+    generatePoints(data[4])
 })

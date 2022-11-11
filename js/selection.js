@@ -13,8 +13,8 @@ generateTeams = () => {
     let width = 800 - margin.left - margin.right;
     let height = 700 - margin.top - margin.bottom;
 
-    let hexColumns = 4;
-    let hexRows = 3;
+    let hexColumns = 4
+    let hexRows = 3
 
     let hexRadius = d3.min([width / ((hexColumns + 0.5) * Math.sqrt(3)), height / ((hexRows + 1 / 3) * 1.5)]);
 

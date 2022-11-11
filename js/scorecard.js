@@ -1,18 +1,4 @@
-// const data = [{
-//     "name": 'IT',
-//     "value": 20,
-//     "negativeValue": -80
-//   }, {
-//     "name": 'Capital Invest',
-//     "value": 30,
-//     "negativeValue": -70
-//   }, {
-//     "name": 'Infrastructure',
-//     "value": 40,
-//     "negativeValue": -60
-//   }];
-  
-render = (data) => {
+ render = (data) => {
     const width = 600,
     labelArea = 100,
     height = 600,
@@ -25,12 +11,12 @@ render = (data) => {
   
   // Now, we don't use 0 as a minimum, but get it from the data using d3.extent
   const x = d3.scaleLinear()
-    .domain([-40, 40])
+    .domain([-30, 30])
     .range([0, width + labelArea]);
   
   const y = d3.scaleBand()
     .domain(data.map(d => d['Over']))
-    .range([height, 0])
+    .range([0, height])
     .padding(0.1);
   
   const svg = d3.select('#scorecard')
