@@ -43,7 +43,7 @@
 }
 
 .chart text {
-    fill: #24da82;
+    fill: black;
 }
 
 .chart text.name {
@@ -51,7 +51,7 @@
 }
 
 .chart text.title {
-    fill: #2216ff;
+    fill: black;
 }
 .active {
     opacity: 1.0;

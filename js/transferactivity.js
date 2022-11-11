@@ -2,6 +2,11 @@ let filteredObject = []
 
 generateTable = (wordsObject) => {
 
+    let teamNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Gaints", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
+    let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
+
+    let foreignPlayers = ["Kane Williamson", "Nicholas Pooran", "Romario Shepherd", "Marco Jansen", "Aiden Markram", "Sean Abbott", "Glenn Phillips", "Fazalhaq Farooqi"]
+    
     let margin = {
         top: 20,
         right: 10,
@@ -105,10 +110,15 @@ generateTable = (wordsObject) => {
         .style('padding-left', gapPercent/4+'px')
         .style('padding-bottom', gapPercent/16+'px')
         .style('background-color', function(d){
-            if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
-                return 'yellow';
+            let forPlayer = d['player']
+            let playerExists = 0
+            for(let i=0; i<8; i++){
+                if(d['player'] == foreignPlayers[i])
+                    playerExists = 1
             }
-            return 'orange';
+            if(playerExists != 1)
+                return '#FF8C00'
+            return '#D3D3D3'
         })
 
     let draftElements = individualTableRow
@@ -122,9 +132,9 @@ generateTable = (wordsObject) => {
         .style('padding-bottom', gapPercent/16+'px')
         .style('background-color', function(d){
             if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
-                return 'yellow';
+                return '#FF8C00';
             }
-            return 'orange';
+            return '#D3D3D3';
         })
 
     let priceElements = individualTableRow
@@ -137,14 +147,14 @@ generateTable = (wordsObject) => {
         .style('padding-top', gapPercent/16+'px')
         .style('padding-bottom', gapPercent/16+'px')
         .style('background-color', function(d){
-            if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
-                return 'yellow';
+            if(d['price'].length > 6 || d['price'] == '$1.82M'){
+                return '#FF8C00';
             }
-            return 'orange';
+            else if(d['price'].length < 5){
+                return '#E5E4E2'
+            }
+            return '#D3D3D3';
         })
-
-    let teamNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Gaints", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
-    let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
 
     let previousTeamElements = individualTableRow
         .append('td')
@@ -156,26 +166,16 @@ generateTable = (wordsObject) => {
         .style('padding-top', gapPercent/16+'px')
         .style('padding-bottom', gapPercent/16+'px')
         .style('background-color', function(d){
-            if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
-                return 'yellow';
+            if(d['previousTeam'] == 'Sunrisers Hyderabad'){
+                return '#FF8C00'
             }
-            return 'orange';
+            else if(d['previousTeam'] == 'NA'){
+                return '#E5E4E2'
+            }
+            else{
+                return '#D3D3D3'
+            }
         })
-        // .style('background-color', function(d){
-        //     prevTeam = d['previousTeam'];
-        //     let teamID = -1;
-        //     for(let i=0; i<10; i++){
-        //         if(prevTeam == teamNames[i]){
-        //             teamID = i;
-        //         }
-        //     }
-        //     if(teamID != -1){
-        //         return teamColor[teamID]
-        //     }
-        //     else{
-        //         return 'yellow'
-        //     }
-        // })
 }
 
 headerData = [
