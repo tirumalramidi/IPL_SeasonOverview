@@ -6,8 +6,8 @@ generateTeams = () => {
     let x = -50
     let y = 85
 
-    let imagePath = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9c3773cb-5629-4145-b044-4ef6f9090376/df0fniy-249cff3d-e01b-49c2-88b1-3b74dd79941b.png/v1/fill/w_1024,h_702,strp/tata_ipl_logo_png_by_harshmore7781_df0fniy-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzAyIiwicGF0aCI6IlwvZlwvOWMzNzczY2ItNTYyOS00MTQ1LWIwNDQtNGVmNmY5MDkwMzc2XC9kZjBmbml5LTI0OWNmZjNkLWUwMWItNDljMi04OGIxLTNiNzRkZDc5OTQxYi5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.prJCcibYKLLQScTvu9F9YNFjYDmp6tPhyxlYxiEQuD4"
-    let cskImage = ""
+    let iplImage = "./assets/ipl.png"
+    let cskImage = "./assets/csk.png"
     let dcImage = ""
     let gtImage = ""
     let kkrImage = ""
@@ -16,7 +16,7 @@ generateTeams = () => {
     let pkImage = ""
     let rcbImage = ""
     let rrImage = ""
-    let srhImage = "" 
+    let srhImage = ""
 
 
 
@@ -93,12 +93,20 @@ generateTeams = () => {
             return teamColor[i];
         });
 
-        img = svg.selectAll("image").data([0]);
-        img.enter()
+    img = svg.selectAll("image").data([1]);
+    img.enter()
         .append("svg:image")
-        .attr("xlink:href", imagePath)
+        .attr("xlink:href", iplImage)
         .attr("x", "167")
         .attr("y", "75")
+        .attr("width", "100")
+        .attr("height", "100");
+
+    img = svg.selectAll("image")
+        .append("svg:image")
+        .attr("xlink:href", cskImage)
+        .attr("x", "100")
+        .attr("y", "100")
         .attr("width", "100")
         .attr("height", "100");
 
