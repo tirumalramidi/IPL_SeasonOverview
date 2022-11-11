@@ -1,7 +1,37 @@
 generateTeams = () => {
 
     let teamNames = ["CSK", "DC", "GT", "KKR", "LSG", "IPL", "MI", "", "PK", "RCB", "RR", "SRH"]
-    let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#FFD700", "#0000FF", "#FFFFFF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
+    let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#FFFFFF", "#0000FF", "#FFFFFF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
+
+    let x = -50
+    let y = 85
+
+    let imagePath = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9c3773cb-5629-4145-b044-4ef6f9090376/df0fniy-249cff3d-e01b-49c2-88b1-3b74dd79941b.png/v1/fill/w_1024,h_702,strp/tata_ipl_logo_png_by_harshmore7781_df0fniy-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzAyIiwicGF0aCI6IlwvZlwvOWMzNzczY2ItNTYyOS00MTQ1LWIwNDQtNGVmNmY5MDkwMzc2XC9kZjBmbml5LTI0OWNmZjNkLWUwMWItNDljMi04OGIxLTNiNzRkZDc5OTQxYi5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.prJCcibYKLLQScTvu9F9YNFjYDmp6tPhyxlYxiEQuD4"
+    let cskImage = ""
+    let dcImage = ""
+    let gtImage = ""
+    let kkrImage = ""
+    let lsgImage = ""
+    let miImage = ""
+    let pkImage = ""
+    let rcbImage = ""
+    let rrImage = ""
+    let srhImage = "" 
+
+
+
+    let textArray = [
+        ['Chennai Super Kings', x, 400, x + 15, '#FFFF00'],
+        ['Delhi Capitals', x, 430, x + 15, '#191970'],
+        ['Gujarat Titans', x + 2 * y, 400, x + 2 * y + 15, '#87CEEB'],
+        ['Kolkata Knight Riders', x + 4.3 * y, 460, x + 4.3 * y + 15, '#4B0082'],
+        ['Lucknow Super Giants', x + 3.75 * y, 400, x + 3.75 * y + 15, '#00FFFF'],
+        ['Mumbai Indians', x + 2 * y, 430, x + 2 * y + 15, '#0000FF'],
+        ['Punjab Kings', x + 6 * y, 400, x + 6 * y + 15, '#FF0000'],
+        ['Royal Challengers Banglore', x + 1.6 * y, 460, x + 1.6 * y + 15, '#8B0000'],
+        ['Rajasthan Royals', x + 6 * y, 430, x + 6 * y + 15, '#FF1493'],
+        ['Sunrisers Hyderabad', x + 3.75 * y, 430, x + 3.75 * y + 15, '#FF8C00']
+    ]
 
     var margin = {
         top: 100,
@@ -62,4 +92,19 @@ generateTeams = () => {
         .attr("fill", function (d, i) {
             return teamColor[i];
         });
+
+        img = svg.selectAll("image").data([0]);
+        img.enter()
+        .append("svg:image")
+        .attr("xlink:href", imagePath)
+        .attr("x", "167")
+        .attr("y", "75")
+        .attr("width", "100")
+        .attr("height", "100");
+
+    for (let text in textArray) {
+        svg.append("circle").attr("cx", textArray[text][1]).attr("cy", textArray[text][2]).attr("r", 7).style("fill", `${textArray[text][4]}`)
+        svg.append("text").attr("x", textArray[text][3]).attr("y", textArray[text][2]).text(`${textArray[text][0]}`).style("font-size", "15px").attr("alignment-baseline", "middle")
+
+    }
 }
