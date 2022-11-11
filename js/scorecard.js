@@ -97,7 +97,10 @@
     .classed('x-axis', true)
     .attr('transform', `translate(0, ${height})`)
     .call(d3.axisBottom(x))
-  
+svg.append("text").attr("x",width/3 + labelArea/1.25).attr("y", 14).attr("class","title").text(`${data[0]['teamOne']}`);
+svg.append("text").attr("x",width/6+width/2+labelArea).attr("y", 14).attr("class","title").text(`${data[0]['teamTwo']}`);
+svg.append("text").attr("x",width/2+labelArea + labelArea/3).attr("y", 14).attr("class","title").text("Over");
+
 //   g.append('g')
 //     .classed('y-axis', true)
 //     .attr('transform', `translate(${x(0)}, 0)`)
