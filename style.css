@@ -52,7 +52,7 @@
 
 .chart text.title {
     fill: #2216ff;
-.click-active,
+}
 .active {
     opacity: 1.0;
     stroke-opacity: 1.0;
