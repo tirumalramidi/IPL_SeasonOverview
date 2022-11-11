@@ -3,7 +3,7 @@
     height: 700px;
 }
 
-.chart{
+.chart {
     width: 700px;
     height: 600px;
 }
@@ -52,4 +52,86 @@
 
 .chart text.title {
     fill: #2216ff;
+.click-active,
+.active {
+    opacity: 1.0;
+    stroke-opacity: 1.0;
+    z-index: 1000;
+    /*r: 8;*/
+}
+
+path.click-active {
+    stroke-width: 3.0;
+}
+
+path.active {
+    stroke-width: 3.0;
+}
+
+.axis text {
+    font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.tooltip {
+    position: absolute;
+    padding: 10px;
+    font: 12px sans-serif;
+    background: #222;
+    color: #fff;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0.9;
+    visibility: hidden;
+}
+
+.csk {
+    fill: #FFFF00;
+}
+
+.dc {
+    fill: #191970;
+}
+
+.gt {
+    fill: #87CEEB
+}
+
+.kkr {
+    fill: #4B0082
+}
+
+.lsg {
+    fill: #00FFFF
+}
+
+.mi {
+    fill: #0000FF
+}
+
+.pk {
+    fill: #FF0000
+}
+
+.rcb {
+    fill: #8B0000
+}
+
+.rr {
+    fill: #FF1493
+}
+
+.srh {
+    fill: #FF8C00
 }

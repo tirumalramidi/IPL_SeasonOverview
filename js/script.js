@@ -28,7 +28,7 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
 
         battingObject = data[1].filter(batting => batting['Player'] == data[0][row]['Player'])
 
-        bbnrhbbscffs1 = ['batInnings', 'batMatches', 'notOut', 'runs', 'highScore', 'batAverage', 'ballsFaced', 'strikeRate', 'centuries', 'fifties', 'foures', 'sixes']
+        bbnrhbbscffs1 = ['batInnings', 'batMatches', 'notOut', 'runs', 'highScore', 'batAverage', 'ballsFaced', 'strikeRate', 'centuries', 'fifties', 'fours', 'sixes']
         bbnrhbbscffs2 = ['Innings', 'Matches', 'Not Out', 'Runs', 'High Score', 'Average', 'Balls Faced', 'Strike Rate', '100', '50', '4s', '6s']
 
         for (let i = 0; i < 12; i++) {
