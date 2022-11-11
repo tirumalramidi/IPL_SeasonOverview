@@ -27,22 +27,28 @@ generatePoints = (data) => {
 
     console.log(data)
 
-    var smargin = { top: 10, right: 30, bottom: 30, left: 60 },
-        width = 700 - smargin.left - smargin.right,
-        height = 600 - smargin.top - smargin.bottom;
+    let margin = {
+        top: 10,
+        right: 30,
+        bottom: 30,
+        left: 60 
+    }
 
-    var svg = d3.select("#pointsHistory")
+    width = 700 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+    let svg = d3.select("#pointsHistory")
         .append("svg")
-        .attr("width", width + smargin.left + smargin.right)
-        .attr("height", height + smargin.top + smargin.bottom)
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform", "translate(" + smargin.left + "," + smargin.top + ")");
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var sumstat = d3.nest()
+    let sumstat = d3.nest()
         .key(function (d) { return d.Teams; })
         .entries(data);
 
-    var x = d3.scaleLinear()
+    let x = d3.scaleLinear()
         .domain(d3.extent(data, function (d) { return +d.Matches; }))
         .range([0, width]);
 
@@ -51,7 +57,7 @@ generatePoints = (data) => {
         .call(d3.axisBottom(x).ticks(10))
         .style("font-size", "12px");
 
-    var y = d3.scaleLinear()
+    let y = d3.scaleLinear()
         .domain([d3.max(data, function (d) { return +d.Position; }), 1])
         .range([height, 0]);
 
@@ -59,9 +65,9 @@ generatePoints = (data) => {
         .call(d3.axisLeft(y))
         .style("font-size", "12px");
 
-    var res = sumstat.map(function (d) { return d.key })
+    let res = sumstat.map(function (d) { return d.key })
 
-    var color = d3.scaleOrdinal()
+    let color = d3.scaleOrdinal()
         .domain(res)
         .range(["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#FFD700", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"])
 
