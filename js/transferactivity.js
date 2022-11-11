@@ -9,7 +9,7 @@ generateTable = (wordsObject) => {
         left: 10
     }
     
-    let tableTotalWidth = 700
+    let tableTotalWidth = 800
     let figureWidth = tableTotalWidth - margin.left - margin.right
     let gapPercent = 0.06 * figureWidth
     let remainingWidth = figureWidth - (4 * gapPercent)
@@ -119,7 +119,6 @@ generateTable = (wordsObject) => {
         .style('font-size', '14px')
         .style('text-align', 'center')
         .style('padding-top', gapPercent/16+'px')
-        .style('padding-left', gapPercent/4+'px')
         .style('padding-bottom', gapPercent/16+'px')
         .style('background-color', function(d){
             if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
@@ -136,7 +135,6 @@ generateTable = (wordsObject) => {
         .style('font-size', '14px')
         .style('text-align', 'center')
         .style('padding-top', gapPercent/16+'px')
-        .style('padding-left', gapPercent/4+'px')
         .style('padding-bottom', gapPercent/16+'px')
         .style('background-color', function(d){
             if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
@@ -144,6 +142,9 @@ generateTable = (wordsObject) => {
             }
             return 'orange';
         })
+
+    let teamNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Gaints", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
+    let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
 
     let previousTeamElements = individualTableRow
         .append('td')
@@ -153,7 +154,6 @@ generateTable = (wordsObject) => {
         .style('font-size', '14px')
         .style('text-align', 'left')
         .style('padding-top', gapPercent/16+'px')
-        .style('padding-left', gapPercent/4+'px')
         .style('padding-bottom', gapPercent/16+'px')
         .style('background-color', function(d){
             if(d['draft'] == 'Draft Pick' || d['draft'] == 'Retained'){
@@ -161,6 +161,21 @@ generateTable = (wordsObject) => {
             }
             return 'orange';
         })
+        // .style('background-color', function(d){
+        //     prevTeam = d['previousTeam'];
+        //     let teamID = -1;
+        //     for(let i=0; i<10; i++){
+        //         if(prevTeam == teamNames[i]){
+        //             teamID = i;
+        //         }
+        //     }
+        //     if(teamID != -1){
+        //         return teamColor[teamID]
+        //     }
+        //     else{
+        //         return 'yellow'
+        //     }
+        // })
 }
 
 headerData = [
