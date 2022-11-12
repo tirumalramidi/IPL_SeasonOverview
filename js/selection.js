@@ -6,20 +6,6 @@ generateTeams = () => {
     let x = -50
     let y = 85
 
-    let iplImage = "./assets/ipl.png"
-    let cskImage = "./assets/csk.png"
-    let dcImage = ""
-    let gtImage = ""
-    let kkrImage = ""
-    let lsgImage = ""
-    let miImage = ""
-    let pkImage = ""
-    let rcbImage = ""
-    let rrImage = ""
-    let srhImage = ""
-
-
-
     let textArray = [
         ['Chennai Super Kings', x, 400, x + 15, '#FFFF00'],
         ['Delhi Capitals', x, 430, x + 15, '#191970'],
@@ -93,22 +79,93 @@ generateTeams = () => {
             return teamColor[i];
         });
 
-    img = svg.selectAll("image").data([1]);
-    img.enter()
-        .append("svg:image")
-        .attr("xlink:href", iplImage)
+    let iplImg = svg.append("g")
+    iplImg.append("svg:image")
+        .attr("xlink:href", "assets/ipl.png")
         .attr("x", "167")
         .attr("y", "75")
         .attr("width", "100")
         .attr("height", "100");
 
-    img = svg.selectAll("image")
-        .append("svg:image")
-        .attr("xlink:href", cskImage)
-        .attr("x", "100")
-        .attr("y", "100")
+    let cskImg = svg.append("g")
+    cskImg.append("svg:image")
+        .attr("xlink:href", "assets/csk.png")
+        .attr("x", "-50")
+        .attr("y", "-50")
         .attr("width", "100")
         .attr("height", "100");
+
+    let dcImg = svg.append("g")
+    dcImg.append("svg:image")
+        .attr("xlink:href", "assets/dc.png")
+        .attr("x", "95")
+        .attr("y", "-50")
+        .attr("width", "100")
+        .attr("height", "100");
+
+    let gtImg = svg.append("g")
+    gtImg.append("svg:image")
+        .attr("xlink:href", "assets/gt.png")
+        .attr("x", "230")
+        .attr("y", "-60")
+        .attr("width", "120")
+        .attr("height", "120");
+
+    let kkrImg = svg.append("g")
+    kkrImg.append("svg:image")
+        .attr("xlink:href", "assets/kkr.png")
+        .attr("x", "385")
+        .attr("y", "-50")
+        .attr("width", "100")
+        .attr("height", "100");
+
+    let lsgImg = svg.append("g")
+    lsgImg.append("svg:image")
+        .attr("xlink:href", "assets/lsg.png")
+        .attr("x", "10")
+        .attr("y", "70")
+        .attr("width", "125")
+        .attr("height", "125");
+
+    let miImg = svg.append("g")
+    miImg.append("svg:image")
+        .attr("xlink:href", "assets/mi.png")
+        .attr("x", "315")
+        .attr("y", "70")
+        .attr("width", "100")
+        .attr("height", "100");
+
+    let pkImg = svg.append("g")
+    pkImg.append("svg:image")
+        .attr("xlink:href", "assets/pk.png")
+        .attr("x", "-50")
+        .attr("y", "200")
+        .attr("width", "100")
+        .attr("height", "100");
+
+    let rcbImg = svg.append("g")
+    rcbImg.append("svg:image")
+        .attr("xlink:href", "assets/rcb.png")
+        .attr("x", "95")
+        .attr("y", "200")
+        .attr("width", "100")
+        .attr("height", "100");
+
+    let rrImg = svg.append("g")
+    rrImg.append("svg:image")
+        .attr("xlink:href", "assets/rr.png")
+        .attr("x", "240")
+        .attr("y", "200")
+        .attr("width", "100")
+        .attr("height", "100");
+
+    let srhImg = svg.append("g")
+    srhImg.append("svg:image")
+        .attr("xlink:href", "assets/srh.png")
+        .attr("x", "375")
+        .attr("y", "195")
+        .attr("width", "125")
+        .attr("height", "125");
 
     for (let text in textArray) {
         svg.append("circle").attr("cx", textArray[text][1]).attr("cy", textArray[text][2]).attr("r", 7).style("fill", `${textArray[text][4]}`)
