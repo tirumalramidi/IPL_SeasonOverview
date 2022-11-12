@@ -6,8 +6,6 @@ pointsData = d3.csv("./data/TeamPositions.csv")
 
 Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).then(data => {
 
-    //console.log(scorecardData)
-
     masterArray = []
     ballBallArray = []
     maximumRowSize = [...Array(Math.max(data[0].length, data[1].length, data[2].length)).keys()]
@@ -51,7 +49,6 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
     let scorecardData = data[3].filter(
         d => d['Match ID'] == '1312200'
     )
-    console.log("masterArray1", scorecardData)
 
     newScore = scorecardData.reduce((group, score) => {
         const { BattingTeam } = score;
@@ -61,12 +58,9 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
       }, {});
 
     let finalScoreSheet = []
-    console.log(newScore)
-
     
     const Overs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     const keys = Object.keys(newScore);
-    console.log(keys)
 
     for (let over in Overs){
         let scoreSheet = {}
@@ -90,8 +84,6 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
 
         finalScoreSheet.push(scoreSheet)
     }
-
-    console.log("masterArray2", finalScoreSheet)
 
     generateTeams()
     generateScatterPlot(masterArray)

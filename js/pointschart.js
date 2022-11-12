@@ -1,13 +1,10 @@
 generatePoints = (data) => {
-
-    console.log('hello')
-
+    
     let selectData = [
-        {"text": "Position"},
-        {"text": "Net Run Rate"},
-        {"text": "Wins"},
-        {"text": "Points"},
-        {"text": "Percentage of Max Points"}
+        { "text": "Position" },
+        { "text": "Net Run Rate" },
+        { "text": "Wins" },
+        { "text": "Losses" }
     ]
 
     let body = d3.select('#pointsHistory')
@@ -15,7 +12,7 @@ generatePoints = (data) => {
     var span = body.append('span')
         .text('What to display on Y-Axis: ')
 
-    var yInput = body.append('select')
+    var xInput = body.append('select')
         .attr('id', 'xSelect')
         .selectAll('option')
         .data(selectData)
@@ -27,17 +24,33 @@ generatePoints = (data) => {
     body.append('br')
     body.append('br')
 
-    console.log(data)
+    let newData = 'Position'
+
+    d3.select('#xSelect')
+        .on('change', function () {
+
+            newData = d3.select(this).property('value');
+            console.log(newData);
+        });
+
+    let xSelectData = ["Position", "Net Run Rate", "Wins", "Losses"]
+    let xOrigData = ["Position", "NRR", "Wins", "Losses"]
+
+    let varSelect = -1
+    for(let i=0; i<4; i++){
+        if(xSelectData[i] == newData)
+            varSelect = i
+    }
 
     let margin = {
         top: 10,
         right: 30,
         bottom: 30,
-        left: 60 
+        left: 60
     }
 
     width = 700 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+        height = 600 - margin.top - margin.bottom;
 
     let svg = d3.select("#pointsHistory")
         .append("svg")
@@ -82,8 +95,8 @@ generatePoints = (data) => {
         .attr("stroke-width", 1.5)
         .attr("d", function (d) {
             return d3.line()
-                .x(function (d) { return x(+d.Matches); })
-                .y(function (d) { return y(+d.Position); })
+                .x(function (d) { return x(+d["Matches"]); })
+                .y(function (d) { return y(+d[xOrigData[varSelect]]); })
                 (d.values)
         })
         .attr("stroke-width", "2.5px");
