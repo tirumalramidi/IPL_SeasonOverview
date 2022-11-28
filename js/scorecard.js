@@ -3,14 +3,14 @@ render = (data) => {
     let teamNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Gaints", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
     let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
 
-    let width = 700
+    let width = 500
     let height = 600
     let labelArea = 100
 
     margin = {
         top: 20,
-        left: 100,
-        right: 40,
+        left: 20,
+        right: 20,
         bottom: 50
     };
 
@@ -73,11 +73,11 @@ render = (data) => {
         .data(data)
         .enter()
         .append("text")
-        .attr("x", (labelArea) + width / 2)
+        .attr("x", (labelArea) + width/2 - 75)
         .attr("y", function (d) {
             return y(d['Over']) + y.bandwidth();
         })
-        .attr('transform', `translate(50, 30)`)
+        .attr('transform', `translate(50, 10)`)
         .attr("dy", ".20em")
         .attr("text-anchor", "middle")
         .attr('class', 'name')
@@ -91,7 +91,7 @@ render = (data) => {
 
     svg.append('g')
         .attr('id', 'xAxis')
-        .attr('transform', `translate(100, 650)`);
+        .attr('transform', `translate(25, 625)`);
     
     let xAxisLines = d3.axisBottom(x)
         .tickFormat(d => Math.abs(d));
@@ -99,27 +99,10 @@ render = (data) => {
     d3.select('#xAxis')
         .call(xAxisLines)
         .style("font-size", "12px");
-
-    // g.append('g')
-    //     .classed('x-axis', true)
-    //     .attr('transform', `translate(0, ${height})`)
-    //     .call(d3.axisBottom(x));
-
-    svg.append("text")
-        .attr("x", width / 3 + labelArea)
-        .attr("y", 14)
-        .attr("class", "title")
-        .text(`${data[0]['teamTwo']}`);
-
-    svg.append("text")
-        .attr("x", width / 6 + width / 2 + labelArea)
-        .attr("y", 14)
-        .attr("class", "title")
-        .text(`${data[0]['teamOne']}`);
         
     svg.append("text")
-        .attr("x", width / 2 + labelArea + labelArea / 3)
-        .attr("y", 14)
+        .attr("x", 310)
+        .attr("y", 15)
         .attr("class", "title")
         .text("Over");
 }
