@@ -100,4 +100,18 @@ generatePoints = (data) => {
                 (d.values)
         })
         .attr("stroke-width", "2.5px");
+
+    //ADDING CIRCLES IG?
+    
+    // svg.selectAll(".circle")
+    //     .data(sumstat)
+    //     .enter()
+    //     .append("circle")
+    //     .attr('r', 2)
+    //     .attr('cx', function(d){
+    //         return x(d.close);
+    //     })
+    //     .attr('cy', function(d){
+    //         return y(d.close);
+    //     });
 }

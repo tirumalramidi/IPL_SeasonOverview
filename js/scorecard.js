@@ -11,11 +11,16 @@ render = (data) => {
         top: 20,
         left: 100,
         right: 40,
-        bottom: 40
+        bottom: 50
     };
 
+    let teamOneMaxRuns = d3.max(data.map(d => d[`${data[0]['teamOne']} Runs`]));
+    let teamTwoMaxRuns = d3.max(data.map(d => d[`${data[0]['teamTwo']} Runs`]));
+
+    let runsDomain = Math.ceil((d3.max([teamOneMaxRuns, teamTwoMaxRuns])) / 5) * 5;
+
     const x = d3.scaleLinear()
-        .domain([-20, 20])
+        .domain([-runsDomain, runsDomain])
         .range([0, width + labelArea]);
 
     const y = d3.scaleBand()
@@ -28,12 +33,10 @@ render = (data) => {
         .attr('width', width + margin.left + margin.right + labelArea)
         .attr('height', height + margin.top + margin.bottom);
 
-    const g = svg
-        .append('g')
-        .attr('transform', `translate(${margin.left} ${margin.right})`);
+    const g = svg.append('g')
+        .attr('transform', `translate(${margin.left}, ${margin.right})`);
 
-    const barGroups = g
-        .selectAll('.barGroup')
+    const barGroups = g.selectAll('.barGroup')
         .data(data);
 
     barGroups.exit().remove();
@@ -42,18 +45,15 @@ render = (data) => {
         .append('g')
         .attr('class', 'barGroup');
 
-    newBarGroups
-        .append('rect')
+    newBarGroups.append('rect')
         .attr('class', 'positive')
         .attr('fill', '#FF1493');
 
-    newBarGroups
-        .append('rect')
+    newBarGroups.append('rect')
         .attr('class', 'negative')
         .attr('fill', '#87CEEB');
 
-    const positiveBars = newBarGroups
-        .merge(barGroups)
+    newBarGroups.merge(barGroups)
         .select('.positive')
         .datum(d => ({
             name: d['Over'],
@@ -61,8 +61,7 @@ render = (data) => {
             team: d['teamOne']
         }));
 
-    const negativeBars = newBarGroups
-        .merge(barGroups)
+    newBarGroups.merge(barGroups)
         .select('.negative')
         .datum(d => ({
             name: d['Over'],
@@ -72,7 +71,8 @@ render = (data) => {
 
     svg.selectAll("text.name")
         .data(data)
-        .enter().append("text")
+        .enter()
+        .append("text")
         .attr("x", (labelArea) + width / 2)
         .attr("y", function (d) {
             return y(d['Over']) + y.bandwidth();
@@ -81,29 +81,42 @@ render = (data) => {
         .attr("dy", ".20em")
         .attr("text-anchor", "middle")
         .attr('class', 'name')
-        .text(function (d) { return d['Over']; });
+        .text(function (d) { return +d['Over']+1; });
 
     newBarGroups.selectAll('rect')
         .attr('x', d => d.team == data[0]['teamOne'] ? x(0) + labelArea / 2 : x(d.value) - labelArea / 2)
         .attr('y', d => y(d.name))
         .attr('width', d => { return d.team == data[0]['teamOne'] ? x(d.value) - x(0) : x(0) - x(d.value) })
-        .attr('height', y.bandwidth())
+        .attr('height', y.bandwidth());
 
-    g.append('g')
-        .classed('x-axis', true)
-        .attr('transform', `translate(0, ${height})`)
-        .call(d3.axisBottom(x))
+    svg.append('g')
+        .attr('id', 'xAxis')
+        .attr('transform', `translate(100, 650)`);
+    
+    let xAxisLines = d3.axisBottom(x)
+        .tickFormat(d => Math.abs(d));
+
+    d3.select('#xAxis')
+        .call(xAxisLines)
+        .style("font-size", "12px");
+
+    // g.append('g')
+    //     .classed('x-axis', true)
+    //     .attr('transform', `translate(0, ${height})`)
+    //     .call(d3.axisBottom(x));
 
     svg.append("text")
         .attr("x", width / 3 + labelArea)
         .attr("y", 14)
         .attr("class", "title")
         .text(`${data[0]['teamTwo']}`);
+
     svg.append("text")
         .attr("x", width / 6 + width / 2 + labelArea)
         .attr("y", 14)
         .attr("class", "title")
         .text(`${data[0]['teamOne']}`);
+        
     svg.append("text")
         .attr("x", width / 2 + labelArea + labelArea / 3)
         .attr("y", 14)

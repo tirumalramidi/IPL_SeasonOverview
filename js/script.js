@@ -1,3 +1,13 @@
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 550 || document.documentElement.scrollTop > 550) {
+    document.getElementById("navbar").style.top = "0";
+  } else {
+    document.getElementById("navbar").style.top = "-50px";
+  }
+}
+
 auctionData = d3.csv("./data/AuctionData.csv")
 battingData = d3.csv("./data/BattingStatistics.csv")
 bowlingData = d3.csv("./data/BowlingStatistics.csv")
