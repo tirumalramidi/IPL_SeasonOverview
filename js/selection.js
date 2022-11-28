@@ -2,6 +2,7 @@ generateTeams = () => {
 
     let teamNames = ["CSK", "DC", "GT", "KKR", "LSG", "IPL", "MI", "", "PK", "RCB", "RR", "SRH"]
     let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#FFFFFF", "#0000FF", "#FFFFFF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
+    let borderColor = ["#FFD700", "#FFD700", "#FFD700", "#FFD700", "#FFD700", "#FFD700", "#FFD700", "", "#FFD700", "#FFD700", "#FFD700", "#FFD700"]
 
     var margin = {
         top: 150,
@@ -61,7 +62,11 @@ generateTeams = () => {
         })
         .attr("fill", function (d, i) {
             return teamColor[i];
-        });
+        })
+        .attr("stroke", function (d, i) {
+            return borderColor[i];
+        })
+        .attr('stroke-width', '4px');
 
     let iplImg = svg.append("g")
     iplImg.append("svg:image")
