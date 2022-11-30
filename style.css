@@ -200,3 +200,16 @@ path.active {
     color: black;
     background-color: #fff;
 }
+
+.tooltip {
+    position: absolute;
+    text-align: left;
+    min-width: 70px;
+    min-height: 10px;
+    font: 12px sans-serif;
+    padding: 3px;
+    background: #eeeeee;
+    stroke: gray;
+    border-radius: 3px;
+    pointer-events: none;
+}

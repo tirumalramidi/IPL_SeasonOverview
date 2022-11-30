@@ -86,6 +86,12 @@ generateScatterPlot = (data) => {
 
     function drawScatterPlot(xVar, yVar) {
 
+        let tooltip = d3.select('#scatterPlot')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('display', 'none')
+            .style('opacity', 0);
+
         let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
         let teamColors = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
 
@@ -161,7 +167,18 @@ generateScatterPlot = (data) => {
             })
             .attr("r", 6.0)
             .style("fill", function (d) { return color(d['team']) })
-            .style('stroke', 'black');
-
+            .style('stroke', 'black')
+            .on("mouseover", function (event, d) {
+                tooltip.text("");
+                tooltip.style("display", "block").transition().duration(200).style("opacity", 0.75);
+                tooltip.style('left', (event.pageX - 5) + 'px').style('top', (event.pageY - 200) + 'px');
+                tooltip.append('span').classed('tooltip-text', true).text('Player: ');
+                tooltip.append('br');
+                tooltip.append('span').classed('tooltip-text', true).text('Team: ');
+                console.log(d.player, d.team)
+            })
+            .on('mouseout', () => {
+                tooltip.transition().duration(500).on('end', () => tooltip.style('display', 'none')).style('opacity', 0);
+            });
     }
 }

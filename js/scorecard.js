@@ -14,10 +14,16 @@ render = (data) => {
         bottom: 50
     };
 
-    let teamOneMaxRuns = d3.max(data.map(d => d[`${data[0]['teamOne']} Runs`]));
-    let teamTwoMaxRuns = d3.max(data.map(d => d[`${data[0]['teamTwo']} Runs`]));
+    let teamOneMaxRuns = d3.max(data.map(d => d["teamOneRuns"]));
+    let teamTwoMaxRuns = d3.max(data.map(d => d["teamTwoRuns"]));
 
     let runsDomain = Math.ceil((d3.max([teamOneMaxRuns, teamTwoMaxRuns])) / 5) * 5;
+
+    let tooltip = d3.select('#scatterPlot')
+        .append('div')
+        .attr('class', 'tooltip')
+        .style('display', 'none')
+        .style('opacity', 0);
 
     const x = d3.scaleLinear()
         .domain([-runsDomain, runsDomain])
@@ -57,7 +63,7 @@ render = (data) => {
         .select('.positive')
         .datum(d => ({
             name: d['Over'],
-            value: d[`${data[0]['teamOne']} Runs`],
+            value: d["teamOneRuns"],
             team: d['teamOne']
         }));
 
@@ -65,7 +71,7 @@ render = (data) => {
         .select('.negative')
         .datum(d => ({
             name: d['Over'],
-            value: -parseInt(d[`${data[0]['teamTwo']} Runs`]),
+            value: -parseInt(d["teamTwoRuns"]),
             team: d['teamTwo']
         }));
 
@@ -73,7 +79,7 @@ render = (data) => {
         .data(data)
         .enter()
         .append("text")
-        .attr("x", (labelArea) + width/2 - 75)
+        .attr("x", (labelArea) + width / 2 - 75)
         .attr("y", function (d) {
             return y(d['Over']) + y.bandwidth();
         })
@@ -81,25 +87,36 @@ render = (data) => {
         .attr("dy", ".20em")
         .attr("text-anchor", "middle")
         .attr('class', 'name')
-        .text(function (d) { return +d['Over']+1; });
+        .text(function (d) { return +d['Over'] + 1; });
 
     newBarGroups.selectAll('rect')
         .attr('x', d => d.team == data[0]['teamOne'] ? x(0) + labelArea / 2 : x(d.value) - labelArea / 2)
         .attr('y', d => y(d.name))
         .attr('width', d => { return d.team == data[0]['teamOne'] ? x(d.value) - x(0) : x(0) - x(d.value) })
-        .attr('height', y.bandwidth());
+        .attr('height', y.bandwidth())
+        .on("mouseover", function (event, d) {
+            tooltip.text("");
+            tooltip.style("display", "block").transition().duration(200).style("opacity", 0.75);
+            tooltip.style('left', (event.pageX - 5) + 'px').style('top', (event.pageY - 200) + 'px');
+            tooltip.append('span').classed('tooltip-text', true).text('Player: ');
+            tooltip.append('br');
+            tooltip.append('span').classed('tooltip-text', true).text('Team: ');
+        })
+        .on('mouseout', () => {
+            tooltip.transition().duration(500).on('end', () => tooltip.style('display', 'none')).style('opacity', 0);
+        });
 
     svg.append('g')
         .attr('id', 'xAxis')
         .attr('transform', `translate(25, 625)`);
-    
+
     let xAxisLines = d3.axisBottom(x)
         .tickFormat(d => Math.abs(d));
 
     d3.select('#xAxis')
         .call(xAxisLines)
         .style("font-size", "12px");
-        
+
     svg.append("text")
         .attr("x", 310)
         .attr("y", 15)

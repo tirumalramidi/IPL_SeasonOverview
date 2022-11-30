@@ -87,8 +87,9 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
             scoreSheet = {
                 'Over' : over
             }
-            scoreSheet[`${keys[1]} Runs`] = runsInOverTeamTwo
-            scoreSheet[`${keys[0]} Runs`] = runsInOverTeamOne
+            
+            scoreSheet[`teamOneRuns`] = runsInOverTeamOne
+            scoreSheet[`teamTwoRuns`] = runsInOverTeamTwo
             scoreSheet['teamOne'] = keys[0]
             scoreSheet['teamTwo'] = keys[1]
 

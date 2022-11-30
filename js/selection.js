@@ -65,15 +65,7 @@ generateTeams = () => {
             return teamColor[i];
         })
         .attr("stroke", '#FFD700')
-        .attr('stroke-width', '4px')
-        .on("mouseover", function (d, i) {
-            d3.select(this)
-                .attr('stroke', 'black');
-        })
-        .on('mouseout', function (d, i) {
-            d3.select(this)
-                .attr('stroke', '#FFD700');
-        });
+        .attr('stroke-width', '4px');
 
     let cskImg = svg.append("g")
     cskImg.append("svg:image")
@@ -81,10 +73,7 @@ generateTeams = () => {
         .attr("x", "-50")
         .attr("y", "-50")
         .attr("width", "100")
-        .attr("height", "100")
-        .on('mousedown', function (d) {
-            teamSelected = 'CSK';
-        });
+        .attr("height", "100");
 
     let dcImg = svg.append("g")
     dcImg.append("svg:image")
@@ -92,10 +81,7 @@ generateTeams = () => {
         .attr("x", "80")
         .attr("y", "-50")
         .attr("width", "100")
-        .attr("height", "100")
-        .on('mousedown', function (d) {
-            teamSelected = 'DC';
-        });
+        .attr("height", "100");
 
     let gtImg = svg.append("g")
     gtImg.append("svg:image")
@@ -103,10 +89,7 @@ generateTeams = () => {
         .attr("x", "200")
         .attr("y", "-60")
         .attr("width", "115")
-        .attr("height", "115")
-        .on('mousedown', function (d) {
-            teamSelected = 'GT';
-        });
+        .attr("height", "115");
 
     let kkrImg = svg.append("g")
     kkrImg.append("svg:image")
@@ -114,10 +97,7 @@ generateTeams = () => {
         .attr("x", "340")
         .attr("y", "-50")
         .attr("width", "100")
-        .attr("height", "100")
-        .on('mousedown', function (d) {
-            teamSelected = 'KKR';
-        });
+        .attr("height", "100");
 
     let lsgImg = svg.append("g")
     lsgImg.append("svg:image")
@@ -125,10 +105,7 @@ generateTeams = () => {
         .attr("x", "455")
         .attr("y", "-55")
         .attr("width", "120")
-        .attr("height", "120")
-        .on('mousedown', function (d) {
-            teamSelected = 'LSG';
-        });
+        .attr("height", "120");
 
     let miImg = svg.append("g")
     miImg.append("svg:image")
@@ -136,10 +113,7 @@ generateTeams = () => {
         .attr("x", "595")
         .attr("y", "-50")
         .attr("width", "100")
-        .attr("height", "100")
-        .on('mousedown', function (d) {
-            teamSelected = 'MI';
-        });
+        .attr("height", "100");
 
     let pkImg = svg.append("g")
     pkImg.append("svg:image")
@@ -147,10 +121,7 @@ generateTeams = () => {
         .attr("x", "724")
         .attr("y", "-50")
         .attr("width", "100")
-        .attr("height", "100")
-        .on('mousedown', function (d) {
-            teamSelected = 'PK';
-        });
+        .attr("height", "100");
 
     let rcbImg = svg.append("g")
     rcbImg.append("svg:image")
@@ -158,10 +129,7 @@ generateTeams = () => {
         .attr("x", "850")
         .attr("y", "-50")
         .attr("width", "100")
-        .attr("height", "100")
-        .on('mousedown', function (d) {
-            teamSelected = 'RCB';
-        });
+        .attr("height", "100");
 
     let rrImg = svg.append("g")
     rrImg.append("svg:image")
@@ -169,10 +137,7 @@ generateTeams = () => {
         .attr("x", "980")
         .attr("y", "-50")
         .attr("width", "100")
-        .attr("height", "100")
-        .on('mousedown', function (d) {
-            teamSelected = 'RR';
-        });
+        .attr("height", "100");
 
     let srhImg = svg.append("g")
     srhImg.append("svg:image")
@@ -180,8 +145,5 @@ generateTeams = () => {
         .attr("x", "1100")
         .attr("y", "-50")
         .attr("width", "120")
-        .attr("height", "120")
-        .on('mousedown', function (d) {
-            teamSelected = 'SRH';
-        });
+        .attr("height", "120");
 }
