@@ -67,7 +67,6 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
     )
 
     matchMater = data[3].reduce((group, score) => {
-        // console.log("Score,",score)
         const { MatchID } = score;
         group[MatchID] = group[MatchID] ?? [];
         group[MatchID].push(score);
@@ -75,13 +74,12 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
       }, {});   
     
       newScore = scorecardData.reduce((group, score) => {
-        // console.log("Score,",score)
         const { BattingTeam } = score;
         group[BattingTeam] = group[BattingTeam] ?? [];
         group[BattingTeam].push(score);
         return group;
-      }, {});   
-    console.log("New Sc",scorecardData)
+      }, 
+      {});
 
     const masterScoreKeys = Object.keys(matchMater);
     const Overs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -156,36 +154,10 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
         seasonMaster.push(tempObject)
     }
 
-    console.log("seasonData",seasonMaster);
-    // playerScoreTeamOne = newScore[`${keys[0]}`].reduce((group, score) => {
-    //     // console.log("Score,",score)
-    //     const { Over } = score;
-    //     group[Over] = group[Over] ?? [];
-    //     group[Over].push(score);
-    //     return group;
-    // }, {});   
-    
-    // playerScoreTeamTwo = newScore[`${keys[1]}`].reduce((group, score) => {
-    // // console.log("Score,",score)
-    // const { Over } = score;
-    // group[Over] = group[Over] ?? [];
-    // group[Over].push(score);
-    // return group;
-    // }, {});
-    
-    // for (let over in playerScoreTeamOne){
-    //    playersInOver = [...new Map(playerScoreTeamOne[over].map((item) => [playerScoreTeamOne["Batsman"], item])).values()];
-    //    console.log('playee',playersInOver);
-    // }
-
-
-    // console.log("playerScore",playerScore)
-
     let finalScoreSheet = []
     
-    // const Overs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     const keys = Object.keys(newScore);
-    console.log("keys",keys);
+    
     for (let over in Overs){
         let scoreSheet = {}
 
@@ -214,6 +186,6 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
     generateScatterPlot(masterArray)
     generateTable(masterArray)
     attachSortHandlers()
-    render(finalScoreSheet);
+    render(finalScoreSheet,seasonMaster);
     generatePoints(data[4])
 })
