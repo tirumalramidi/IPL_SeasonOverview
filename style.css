@@ -4,101 +4,8 @@
 }
 
 .rowDivision {
-    width: 1500px;
+    width: 1400px;
     height: 700px;
-}
-
-.chart {
-    width: 700px;
-    height: 600px;
-}
-
-.sorting {
-    background: black;
-    color: white;
-}
-
-.sortable {
-    user-select: none;
-    border-radius: 3px;
-    cursor: pointer;
-    padding: 6px;
-}
-
-.sortable:hover {
-    background: #d1d1d1;
-}
-
-.sortable.sorting:hover {
-    background: #232323;
-}
-
-.chart .right {
-    stroke: white;
-    fill: indianred;
-}
-
-.chart .left {
-    stroke: white;
-    fill: steelblue;
-}
-
-.chart rect:hover {
-    fill: #64707d;
-}
-
-.chart text {
-    fill: black;
-}
-
-.chart text.name {
-    fill: black;
-}
-
-.chart text.title {
-    fill: black;
-}
-
-.active {
-    opacity: 1.0;
-    stroke-opacity: 1.0;
-    z-index: 1000;
-}
-
-path.click-active {
-    stroke-width: 3.0;
-}
-
-path.active {
-    stroke-width: 3.0;
-}
-
-.axis text {
-    font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
-}
-
-.x.axis path {
-    display: none;
-}
-
-.tooltip {
-    position: absolute;
-    padding: 10px;
-    font: 12px sans-serif;
-    background: #222;
-    color: #fff;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
-    opacity: 0.9;
-    visibility: hidden;
 }
 
 .csk {
@@ -154,7 +61,7 @@ path.active {
     display: block;
     color: white;
     text-align: center;
-    padding: 15px;
+    padding: 20px;
     text-decoration: none;
 }
 

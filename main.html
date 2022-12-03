@@ -4,14 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://d3js.org/d3.v6.js"></script>
     <script src="https://d3js.org/d3.v7.js"></script>
     <script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
     <script src="https://d3js.org/d3-array.v2.min.js"></script>
     <script src="https://d3js.org/d3-force.v2.min.js"></script>
     <link href="style.css" rel="stylesheet" type="text/css" />
 
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
     <script src="js/pointschart.js"></script>
     <script src="js/script.js"></script>
@@ -24,17 +28,17 @@
 <body style="padding-left: 20px">
 
     <div id="navbar">
-        <ul>
-            <li><a href="#csk">CSK</a></li>
-            <li><a href="#dc">DC</a></li>
-            <li><a href="#gt">GT</a></li>
-            <li><a href="#kkr">KKR</a></li>
-            <li><a href="#lsg">LSG</a></li>
-            <li><a href="#mi">MI</a></li>
-            <li><a href="#pk">PK</a></li>
-            <li><a href="#rcb">RCB</a></li>
-            <li><a href="#rr">RR</a></li>
-            <li><a href="#srh">SRH</a></li>
+        <ul id="nav-item">
+            <li id='CSK'><a>CSK</a></li>
+            <li id='DC'><a>DC</a></li>
+            <li id='GT'><a>GT</a></li>
+            <li id='KKR'><a>KKR</a></li>
+            <li id='LSG'><a>LSG</a></li>
+            <li id='MI'><a>MI</a></li>
+            <li id='PK'><a>PK</a></li>
+            <li id='RCB'><a>RCB</a></li>
+            <li id='RR'><a>RR</a></li>
+            <li id='SRH'><a>SRH</a></li>
         </ul>
     </div>
 
@@ -47,18 +51,45 @@
         </div>
         <div class="rowDivision" style="display:flex; margin-top: 15px">
             <div class="chart">
+                <h2>Teams Progression</h2>
+                <div id="pointsHistory"></div>
+            </div>
+            <div>
+                <h6>Now, lets take a look at the Points History of every single team after every match of the IPL 2022
+                    Season</h6>
+                <h6>Additionally, you can change at the metrics you want to see by using </h6>
+            </div>
+        </div>
+        <br>
+        <div class="rowDivision" style="display:flex; margin-top: 15px">
+            <div>
+                <h6>Now, lets take a look at the Points History of every single team after every match of the IPL 2022
+                    Season</h6>
+                <h6>Additionally, you can change at the metrics you want to see by using </h6>
+            </div>
+            <div class="chart">
                 <h2>Player Statistics</h2>
                 <div id="scatterPlot"></div>
             </div>
-            <div class="chart">
-                <h2>Points Progression</h2>
-                <div id="pointsHistory"></div>
-            </div>
         </div>
+        <br>
         <div class="rowDivision" style="display:flex; margin-top: 15px">
             <div class="chart">
                 <h2>Match Overview</h2>
                 <div id="scorecard"></div>
+            </div>
+            <div>
+                <h6>Now, lets take a look at the Points History of every single team after every match of the IPL 2022
+                    Season</h6>
+                <h6>Additionally, you can change at the metrics you want to see by using </h6>
+            </div>
+        </div>
+        <br>
+        <div class="rowDivision" style="display:flex; margin-top: 15px">
+            <div>
+                <h6>Now, lets take a look at the Points History of every single team after every match of the IPL 2022
+                    Season</h6>
+                <h6>Additionally, you can change at the metrics you want to see by using </h6>
             </div>
             <div class="chart">
                 <h2>Transfer Activity</h2>

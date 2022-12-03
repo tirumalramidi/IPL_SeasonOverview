@@ -102,7 +102,7 @@ generateScatterPlot = (data) => {
             left: 30
         }
 
-        width = 700 - margin.left - margin.right;
+        width = 750 - margin.left - margin.right;
         height = 600 - margin.top - margin.bottom;
 
         let xySelect = ["Runs", "Innings", "Matches", "Not Out", "Average", "Balls Faced", "Strike Rate", "Centuries", "Fifties", "Fours", "Sixes"]
@@ -169,16 +169,56 @@ generateScatterPlot = (data) => {
             .style("fill", function (d) { return color(d['team']) })
             .style('stroke', 'black')
             .on("mouseover", function (event, d) {
+                let varColor = ''
+                for (let i = 0; i < 10; i++) {
+                    if (teamsNames[i] == d.team) {
+                        varColor = teamColors[i]
+                    }
+                }
                 tooltip.text("");
-                tooltip.style("display", "block").transition().duration(200).style("opacity", 0.75);
-                tooltip.style('left', (event.pageX - 5) + 'px').style('top', (event.pageY - 200) + 'px');
-                tooltip.append('span').classed('tooltip-text', true).text('Player: ');
+                tooltip.style("display", "block")
+                    .transition().duration(200)
+                    .style("opacity", 0.75);
+                tooltip.style('left', (event.pageX) + 'px')
+                    .style('top', (event.pageY - 100) + 'px');
+                tooltip.append('span')
+                    .classed('tooltip-text', true)
+                    .text('Player: ');
+                tooltip.append('span')
+                    .classed('tooltip-text', true)
+                    .text(d.player)
+                    .style('color', '#996600');
                 tooltip.append('br');
-                tooltip.append('span').classed('tooltip-text', true).text('Team: ');
-                console.log(d.player, d.team)
+                tooltip.append('span')
+                    .classed('tooltip-text', true)
+                    .text('Team: ');
+                tooltip.append('span')
+                    .classed('tooltip-text', true)
+                    .text(d.team)
+                    .style('color', '#996600');
+                //.style('color', varColor);
+                tooltip.append('br');
+                tooltip.append('span')
+                    .classed('tooltip-text', true)
+                    .text(xySelect[varXSelected] + ': ');
+                tooltip.append('span')
+                    .classed('tooltip-text', true)
+                    .text(d[xyData[varXSelected]])
+                    .style('color', '#996600');
+                tooltip.append('br');
+                tooltip.append('span')
+                    .classed('tooltip-text', true)
+                    .text(xySelect[varYSelected] + ': ');
+                tooltip.append('span')
+                    .classed('tooltip-text', true)
+                    .text(d[xyData[varYSelected]])
+                    .style('color', '#996600');
             })
             .on('mouseout', () => {
-                tooltip.transition().duration(500).on('end', () => tooltip.style('display', 'none')).style('opacity', 0);
+                tooltip.transition()
+                    .duration(500)
+                    .on('end', () => tooltip.style('display', 'none'))
+                    .style('opacity', 0);
             });
     }
 }

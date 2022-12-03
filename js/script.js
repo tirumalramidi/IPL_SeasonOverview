@@ -1,12 +1,18 @@
-window.onscroll = function() {scrollFunction()};
+let selectedTeam = ''
 
-function scrollFunction() {
-  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-    document.getElementById("navbar").style.top = "0";
-  } else {
-    document.getElementById("navbar").style.top = "-50px";
-  }
-}
+window.onscroll = function () {
+    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        document.getElementById("navbar").style.top = "0";
+    } else {
+        document.getElementById("navbar").style.top = "-50px";
+    }
+};
+
+$(document).ready(function () {
+    $("#nav-item li").click(function () {
+        selectedTeam = this.id
+    });
+})
 
 auctionData = d3.csv("./data/AuctionData.csv")
 battingData = d3.csv("./data/BattingStatistics.csv")
@@ -183,23 +189,23 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
     for (let over in Overs){
         let scoreSheet = {}
 
-            tempScoreOfTeamOne = newScore[`${keys[0]}`].filter(score => score['Over'] == Overs[over])
-            tempScoreOfTeamTwo = newScore[`${keys[1]}`].filter(score => score['Over'] == Overs[over])
+        tempScoreOfTeamOne = newScore[`${keys[0]}`].filter(score => score['Over'] == Overs[over])
+        tempScoreOfTeamTwo = newScore[`${keys[1]}`].filter(score => score['Over'] == Overs[over])
 
-            ballRunsInOverTeamOne =  tempScoreOfTeamOne.map(score => parseInt(score['Total Runs']));
-            ballRunsInOverTeamTwo =  tempScoreOfTeamTwo.map(score => parseInt(score['Total Runs']));
+        ballRunsInOverTeamOne = tempScoreOfTeamOne.map(score => parseInt(score['Total Runs']));
+        ballRunsInOverTeamTwo = tempScoreOfTeamTwo.map(score => parseInt(score['Total Runs']));
 
-            runsInOverTeamOne = ballRunsInOverTeamOne.reduce((partialSum, a) => partialSum + a, 0)
-            runsInOverTeamTwo = ballRunsInOverTeamTwo.reduce((partialSum, a) => partialSum + a, 0)
+        runsInOverTeamOne = ballRunsInOverTeamOne.reduce((partialSum, a) => partialSum + a, 0)
+        runsInOverTeamTwo = ballRunsInOverTeamTwo.reduce((partialSum, a) => partialSum + a, 0)
 
-            scoreSheet = {
-                'Over' : over
-            }
-            
-            scoreSheet[`teamOneRuns`] = runsInOverTeamOne
-            scoreSheet[`teamTwoRuns`] = runsInOverTeamTwo
-            scoreSheet['teamOne'] = keys[0]
-            scoreSheet['teamTwo'] = keys[1]
+        scoreSheet = {
+            'Over': over
+        }
+
+        scoreSheet[`teamOneRuns`] = runsInOverTeamOne
+        scoreSheet[`teamTwoRuns`] = runsInOverTeamTwo
+        scoreSheet['teamOne'] = keys[0]
+        scoreSheet['teamTwo'] = keys[1]
 
         finalScoreSheet.push(scoreSheet)
     }

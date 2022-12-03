@@ -3,7 +3,8 @@ generatePoints = (data) => {
     let selectData = [
         { "text": "Position" },
         { "text": "Wins" },
-        { "text": "Losses" }
+        { "text": "Losses" },
+        { "text": "Net Run Rate" }
     ]
 
     let body = d3.select('#pointsHistory')
@@ -38,14 +39,22 @@ generatePoints = (data) => {
 
     function drawPointsChart(variable) {
 
-        let xSelectData = ["Position", "Wins", "Losses"]
-        let xOrigData = ["Position", "Wins", "Losses"]
+        let tooltip = d3.select('#pointsHistory')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('display', 'none')
+            .style('opacity', 0);
+
+        let xSelectData = ["Position", "Wins", "Losses", "Net Run Rate"]
+        let xOrigData = ["Position", "Wins", "Losses", "NRR"]
 
         let varSelect = -1
         for (let i = 0; i < 4; i++) {
             if (xSelectData[i] == variable)
                 varSelect = i
         }
+
+        variable = xOrigData[varSelect]
 
         let margin = {
             top: 10,
@@ -54,7 +63,7 @@ generatePoints = (data) => {
             left: 60
         }
 
-        let width = 700 - margin.left - margin.right;
+        let width = 800 - margin.left - margin.right;
         let height = 600 - margin.top - margin.bottom;
 
         let svg = d3.select("#pointsHistory")
@@ -79,20 +88,25 @@ generatePoints = (data) => {
 
         let y;
 
-        if(variable == 'Position'){
+        if (variable == 'Position') {
             y = d3.scaleLinear()
-            .domain([d3.max(data, function (d) { return +d.Position; }), 1])
-            .range([height, 0]);
+                .domain([d3.max(data, function (d) { return +d.Position; }), 1])
+                .range([height, 0]);
         }
-        else if(variable == 'Wins'){
+        else if (variable == 'Wins') {
             y = d3.scaleLinear()
-            .domain([0, d3.max(data, function (d) { return +d.Wins; })])
-            .range([height, 0]);
+                .domain([0, d3.max(data, function (d) { return +d.Wins; })])
+                .range([height, 0]);
         }
-        else if(variable == 'Losses'){
+        else if (variable == 'Losses') {
             y = d3.scaleLinear()
-            .domain([0, d3.max(data, function (d) { return +d.Losses; })])
-            .range([height, 0]);
+                .domain([0, d3.max(data, function (d) { return +d.Losses; })])
+                .range([height, 0]);
+        }
+        else if (variable == 'NRR') {
+            y = d3.scaleLinear()
+                .domain([d3.min(data, function (d) { return +d.NRR; }), d3.max(data, function (d) { return +d.NRR; })])
+                .range([height, 0]);
         }
 
         svg.append("g")
@@ -127,20 +141,15 @@ generatePoints = (data) => {
                         (d.values)
                 }
             })
-            .attr("stroke-width", "2.5px");
-
-        //ADDING CIRCLES IG?
-
-        // svg.selectAll(".circle")
-        //     .data(sumstat)
-        //     .enter()
-        //     .append("circle")
-        //     .attr('r', 2)
-        //     .attr('cx', function(d){
-        //         return x(d.close);
-        //     })
-        //     .attr('cy', function(d){
-        //         return y(d.close);
-        //     });
+            .attr("stroke-width", "2.5px")
+            .on("mouseover", function (event, i, n) {
+                //console.log('MouseOver')
+            })
+            .on("mouseout", function (d, i) {
+                //console.log('MouseOut')
+            })
+            .on("mousedown", function (d, i) {
+                //console.log('MouseDown')
+            });
     }
 }

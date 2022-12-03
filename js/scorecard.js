@@ -3,7 +3,7 @@ render = (data) => {
     let teamNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Gaints", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
     let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
 
-    let width = 500
+    let width = 600
     let height = 600
     let labelArea = 100
 
@@ -96,14 +96,40 @@ render = (data) => {
         .attr('height', y.bandwidth())
         .on("mouseover", function (event, d) {
             tooltip.text("");
-            tooltip.style("display", "block").transition().duration(200).style("opacity", 0.75);
-            tooltip.style('left', (event.pageX - 5) + 'px').style('top', (event.pageY - 200) + 'px');
-            tooltip.append('span').classed('tooltip-text', true).text('Player: ');
+            tooltip.style("display", "block")
+                .transition().duration(200)
+                .style("opacity", 0.75);
+            tooltip.style('left', (event.pageX) + 'px')
+                .style('top', (event.pageY - 50) + 'px');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Wickets: ')
+                .style('color', '#2A6592');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('0')
+                .style('color', '#996600');
+            tooltip.append('br')
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Player1: ');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Runs')
+                .style('color', '#996600');
             tooltip.append('br');
-            tooltip.append('span').classed('tooltip-text', true).text('Team: ');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Player2: ');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Runs')
+                .style('color', '#996600');
         })
         .on('mouseout', () => {
-            tooltip.transition().duration(500).on('end', () => tooltip.style('display', 'none')).style('opacity', 0);
+            tooltip.transition().duration(500)
+                .on('end', () => tooltip.style('display', 'none'))
+                .style('opacity', 0);
         });
 
     svg.append('g')
@@ -118,7 +144,7 @@ render = (data) => {
         .style("font-size", "12px");
 
     svg.append("text")
-        .attr("x", 310)
+        .attr("x", 360)
         .attr("y", 15)
         .attr("class", "title")
         .text("Over");
