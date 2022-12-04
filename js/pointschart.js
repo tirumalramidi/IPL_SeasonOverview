@@ -119,7 +119,7 @@ generatePoints = (data, selectedTeam) => {
             .domain(res)
             .range(["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#FFD700", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"])
 
-        svg.selectAll(".line")
+        let line = svg.selectAll(".line")
             .data(sumstat)
             .enter()
             .append("path")

@@ -1,40 +1,49 @@
-let newXData = "Average"
-let newYData = "Runs"
+let newXData = "Batting Average"
+let newYData = "Runs Scored"
 
 generateScatterPlot = (data,selectedTeam) => {
 
     console.log(data)
 
     let selectXData = [
-        { "text": "Average" },
-        { "text": "Innings" },
-        { "text": "Matches" },
+        { "text": "Batting Average" },
         { "text": "Not Out" },
-        { "text": "Runs" },
+        { "text": "Runs Scored" },
         { "text": "Balls Faced" },
-        { "text": "Strike Rate" },
+        { "text": "Batting Strike Rate" },
         { "text": "Centuries" },
         { "text": "Fifties" },
-        { "text": "Fours" },
-        { "text": "Sixes" }
+        { "text": "Fours Hit" },
+        { "text": "Sixes Hit" },
+        { "text": "Overs Bowled" },
+        { "text": "Runs Conceded" },
+        { "text": "Wickets Taken" },
+        { "text": "Bowling Average" },
+        { "text": "Economy" },
+        { "text": "Bowling Strike Rate" },
+        { "text": "Fours Given" },
+        { "text": "Sixes Given" }
     ]
 
     let selectYData = [
-        { "text": "Runs" },
-        { "text": "Innings" },
-        { "text": "Matches" },
+        { "text": "Runs Scored" },
+        { "text": "Batting Average" },
         { "text": "Not Out" },
-        { "text": "Average" },
         { "text": "Balls Faced" },
-        { "text": "Strike Rate" },
+        { "text": "Batting Strike Rate" },
         { "text": "Centuries" },
         { "text": "Fifties" },
-        { "text": "Fours" },
-        { "text": "Sixes" }
+        { "text": "Fours Hit" },
+        { "text": "Sixes Hit" },
+        { "text": "Overs Bowled" },
+        { "text": "Runs Conceded" },
+        { "text": "Wickets Taken" },
+        { "text": "Bowling Average" },
+        { "text": "Economy" },
+        { "text": "Bowling Strike Rate" },
+        { "text": "Four Wicket Hauls" },
+        { "text": "Five Wicket Hauls" }
     ]
-
-    let xySelect = ["Runs", "Innings", "Matches", "Not Out", "Average", "Balls Faced", "Strike Rate", "Centuries", "Fifties", "Fours", "Sixes"]
-    let xyData = ["runs", "batInnings", "batMatches", "notOut", "batAverage", "ballsFaced", "strikeRate", "centuries", "fifties", "fours", "sixes"]
 
     let body = d3.select('#scatterPlot');
 
@@ -66,7 +75,7 @@ generateScatterPlot = (data,selectedTeam) => {
 
     body.append('br');
 
-    drawScatterPlot("Average", "Runs");
+    drawScatterPlot("Batting Average", "Runs Scored");
 
     d3.select('#xspSelect')
         .on('change', function () {
@@ -118,17 +127,17 @@ generateScatterPlot = (data,selectedTeam) => {
         width = 750 - margin.left - margin.right;
         height = 600 - margin.top - margin.bottom;
 
-        let xySelect = ["Runs", "Innings", "Matches", "Not Out", "Average", "Balls Faced", "Strike Rate", "Centuries", "Fifties", "Fours", "Sixes"]
-        let xyData = ["runs", "batInnings", "batMatches", "notOut", "batAverage", "ballsFaced", "strikeRate", "centuries", "fifties", "fours", "sixes"]
+        let xySelect = ["Runs Scored", "Not Out", "Batting Average", "Balls Faced", "Batting Strike Rate", "Centuries", "Fifties", "Fours Hit", "Sixes Hit", "Overs Bowled", "Runs Conceded", "Wickets Taken", "Bowling Average", "Economy", "Bowling Strike Rate", "Four Wicket Hauls", "Five Wicket Hauls"]
+        let xyData = ["runs", "notOut", "batAverage", "ballsFaced", "strikeRate", "centuries", "fifties", "fours", "sixes", "bowlOvers", "runsGiven", "wicketsTaken", "bowlAverage", "economy", "bowlSR", "fourW", "fiveW"]
 
         let varXSelected = 0
-        for (let i = 0; i < 11; i++) {
+        for (let i = 0; i < 16; i++) {
             if (xVar == xySelect[i])
                 varXSelected = i
         }
 
         let varYSelected = 1
-        for (let i = 0; i < 11; i++) {
+        for (let i = 0; i < 16; i++) {
             if (yVar == xySelect[i])
                 varYSelected = i
         }
@@ -167,7 +176,9 @@ generateScatterPlot = (data,selectedTeam) => {
             .domain(teamsNames)
             .range(teamColors);
 
-        let xSvg = svg.append('g')
+        console.log(data)
+
+        let dots = svg.append('g')
             .selectAll("dot")
             .data(data)
             .enter()
@@ -190,7 +201,7 @@ generateScatterPlot = (data,selectedTeam) => {
             .style('opacity', 0);
 
 
-            xSvg.transition()
+            dots.transition()
             .duration( function(d){
                 if(selectedTeam == 'none')
                     return 2000
@@ -213,53 +224,58 @@ generateScatterPlot = (data,selectedTeam) => {
                 else
                     return 0.2 });
             
-            xSvg.on("mouseover", function (event, d) {
+            dots.on("mouseover", function (event, d) {
                 let varColor = ''
                 for (let i = 0; i < 10; i++) {
                     if (teamsNames[i] == d.team) {
                         varColor = teamColors[i]
                     }
                 }
-                tooltip.text("");
-                tooltip.style("display", "block")
-                    .transition().duration(200)
-                    .style("opacity", 0.75);
-                tooltip.style('left', (event.pageX) + 'px')
-                    .style('top', (event.pageY - 100) + 'px');
-                tooltip.append('span')
-                    .classed('tooltip-text', true)
-                    .text('Player: ');
-                tooltip.append('span')
-                    .classed('tooltip-text', true)
-                    .text(d.player)
-                    .style('color', '#996600');
-                tooltip.append('br');
-                tooltip.append('span')
-                    .classed('tooltip-text', true)
-                    .text('Team: ');
-                tooltip.append('span')
-                    .classed('tooltip-text', true)
-                    .text(d.team)
-                    .style('color', '#996600');
-                //.style('color', varColor);
-                tooltip.append('br');
-                tooltip.append('span')
-                    .classed('tooltip-text', true)
-                    .text(xySelect[varXSelected] + ': ');
-                tooltip.append('span')
-                    .classed('tooltip-text', true)
-                    .text(d[xyData[varXSelected]])
-                    .style('color', '#996600');
-                tooltip.append('br');
-                tooltip.append('span')
-                    .classed('tooltip-text', true)
-                    .text(xySelect[varYSelected] + ': ');
-                tooltip.append('span')
-                    .classed('tooltip-text', true)
-                    .text(d[xyData[varYSelected]])
-                    .style('color', '#996600');
-            })
+    
+
+            tooltip.text("");
+            tooltip.style("display", "block")
+                .transition().duration(200)
+                .style("opacity", 0.75);
+            tooltip.style('left', (event.pageX) + 'px')
+                .style('top', (event.pageY - 100) + 'px');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Player: ');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(d.player)
+                .style('color', '#996600');
+            tooltip.append('br');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Team: ');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(d.team)
+                .style('color', '#996600');
+            tooltip.append('br');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(xySelect[varXSelected] + ': ');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(d[xyData[varXSelected]])
+                .style('color', '#996600');
+            tooltip.append('br');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(xySelect[varYSelected] + ': ');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(d[xyData[varYSelected]])
+                .style('color', '#996600');
+        })
             .on('mouseout', () => {
+
+                svg.selectAll('circle')
+                    .style('opacity', 1)
+
                 tooltip.transition()
                     .duration(500)
                     .on('end', () => tooltip.style('display', 'none'))

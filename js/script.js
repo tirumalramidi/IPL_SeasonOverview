@@ -53,17 +53,16 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
         bbbrwbebff2 = ['Matches', 'Innings', 'Overs', 'Runs', 'Wickets', 'Average', 'Economy', 'Strike Rate', '4W', '5W']
 
         for (let i = 0; i < 10; i++) {
-            if(bbbrwbebff2[i] == 'Average'){
-                tempObject[bbbrwbebff1[i]] = bowlingObject.length != 0 ? +bowlingObject[0][bbbrwbebff2[i]] : ''
-
-            }else{
-
+            if (bbbrwbebff2[i] == 'Average') {
+                tempObject[bbbrwbebff1[i]] = bowlingObject.length != 0 ? parseFloat(bowlingObject[0][bbbrwbebff2[i]]) : ''
+            } else {
                 tempObject[bbbrwbebff1[i]] = bowlingObject.length != 0 ? parseInt(bowlingObject[0][bbbrwbebff2[i]]) : ''
             }
         }
 
-        masterArray.push(tempObject);
-
+        if (bowlingObject.length > 0 || battingObject.length > 0) {
+            masterArray.push(tempObject) ? (bowlingObject.length != 0 && bowlingObject[0]['Matches'] > 0) && (battingObject.length != 0 && battingObject[0]['Matches'] > 0) : '';
+        }
     }
 
     let scorecardData = data[3].filter(
@@ -75,21 +74,21 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
         group[MatchID] = group[MatchID] ?? [];
         group[MatchID].push(score);
         return group;
-      }, {});   
-    
-      newScore = scorecardData.reduce((group, score) => {
+    }, {});
+
+    newScore = scorecardData.reduce((group, score) => {
         const { BattingTeam } = score;
         group[BattingTeam] = group[BattingTeam] ?? [];
         group[BattingTeam].push(score);
         return group;
-      }, 
-      {});
+    },
+        {});
 
     const masterScoreKeys = Object.keys(matchMater);
     const Overs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 
     let seasonMaster = []
-    for (let match in masterScoreKeys){
+    for (let match in masterScoreKeys) {
         let currentMatchArray = matchMater[masterScoreKeys[match]]
         let matchMasterObject = []
         const teamsPlayed = [...new Set(currentMatchArray.map(match => match["BattingTeam"]))];
@@ -97,40 +96,40 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
         teamOneData = currentMatchArray.filter(batting => batting['BattingTeam'] == teamsPlayed[0])
         teamTwoData = currentMatchArray.filter(batting => batting['BattingTeam'] == teamsPlayed[1])
 
-        for(let over in Overs){
+        for (let over in Overs) {
             overDataOfTeamOne = teamOneData.filter(overData => overData['Over'] == Overs[over])
             overDataOfTeamTwo = teamTwoData.filter(overData => overData['Over'] == Overs[over])
             const batsmanPlayedForTeamOne = [...new Set(overDataOfTeamOne.map(match => match["Batsman"]))];
             const batsmanPlayedForTeamTwo = [...new Set(overDataOfTeamTwo.map(match => match["Batsman"]))];
             let batsmanRunsTeamOne = {}
             let batsmanRunsTeamTwo = {}
-            wicketsDataOfTeamOne =  overDataOfTeamOne.map(score => parseInt(score['Wicket?']));
+            wicketsDataOfTeamOne = overDataOfTeamOne.map(score => parseInt(score['Wicket?']));
             wicketsByTeamOne = wicketsDataOfTeamOne.reduce((partialSum, a) => partialSum + a, 0)
 
-            wicketsDataOfTeamTwo =  overDataOfTeamTwo.map(score => parseInt(score['Wicket?']));
+            wicketsDataOfTeamTwo = overDataOfTeamTwo.map(score => parseInt(score['Wicket?']));
             wicketsByTeamTwo = wicketsDataOfTeamTwo.reduce((partialSum, a) => partialSum + a, 0)
 
-            extraRunsOfTeamOneData =  overDataOfTeamTwo.map(score => parseInt(score['Extras Run']));
+            extraRunsOfTeamOneData = overDataOfTeamTwo.map(score => parseInt(score['Extras Run']));
             extraRunsTeamOne = extraRunsOfTeamOneData.reduce((partialSum, a) => partialSum + a, 0)
 
-            extraRunsOfTeamTwoData =  overDataOfTeamTwo.map(score => parseInt(score['Extras Run']));
+            extraRunsOfTeamTwoData = overDataOfTeamTwo.map(score => parseInt(score['Extras Run']));
             extraRunsTeamTwo = extraRunsOfTeamTwoData.reduce((partialSum, a) => partialSum + a, 0)
 
-            ballRunsInOverTeamOne =  overDataOfTeamOne.map(score => parseInt(score['Total Runs']));
-            ballRunsInOverTeamTwo =  overDataOfTeamTwo.map(score => parseInt(score['Total Runs']));
+            ballRunsInOverTeamOne = overDataOfTeamOne.map(score => parseInt(score['Total Runs']));
+            ballRunsInOverTeamTwo = overDataOfTeamTwo.map(score => parseInt(score['Total Runs']));
 
             runsInOverTeamOne = ballRunsInOverTeamOne.reduce((partialSum, a) => partialSum + a, 0)
             runsInOverTeamTwo = ballRunsInOverTeamTwo.reduce((partialSum, a) => partialSum + a, 0)
 
-            for (let batsman in batsmanPlayedForTeamOne){
+            for (let batsman in batsmanPlayedForTeamOne) {
                 batsmanData = overDataOfTeamOne.filter(batting => batting['Batsman'] == batsmanPlayedForTeamOne[batsman])
-                batsmanRuns =  batsmanData.map(score => parseInt(score['Batsman Runs']));
+                batsmanRuns = batsmanData.map(score => parseInt(score['Batsman Runs']));
                 runsByBatsman = batsmanRuns.reduce((partialSum, a) => partialSum + a, 0)
                 batsmanRunsTeamOne[batsmanPlayedForTeamOne[batsman]] = runsByBatsman
             }
-            for (let batsman in batsmanPlayedForTeamTwo){
+            for (let batsman in batsmanPlayedForTeamTwo) {
                 batsmanData = overDataOfTeamTwo.filter(batting => batting['Batsman'] == batsmanPlayedForTeamTwo[batsman])
-                batsmanRuns =  batsmanData.map(score => parseInt(score['Batsman Runs']));
+                batsmanRuns = batsmanData.map(score => parseInt(score['Batsman Runs']));
                 runsByBatsman = batsmanRuns.reduce((partialSum, a) => partialSum + a, 0)
                 batsmanRunsTeamTwo[batsmanPlayedForTeamTwo[batsman]] = runsByBatsman
             }
@@ -148,7 +147,7 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
 
             matchMasterObject.push(tempObject);
         }
-        
+
         let tempObject = {}
         tempObject['teamOne'] = teamsPlayed[0]
         tempObject['teamTwo'] = teamsPlayed[1]
@@ -159,10 +158,10 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
     }
 
     let finalScoreSheet = []
-    
+
     const keys = Object.keys(newScore);
-    
-    for (let over in Overs){
+
+    for (let over in Overs) {
         let scoreSheet = {}
 
         tempScoreOfTeamOne = newScore[`${keys[0]}`].filter(score => score['Over'] == Overs[over])

@@ -98,8 +98,13 @@ render = (data1, data2, selectedTeam) => {
         .attr('height', y.bandwidth())
         .on("mouseover", function (event, d) {
 
+            d3.selectAll('rect')
+                .style('opacity', 0.33)
+
+            d3.select(this)
+                .style('opacity', 1)
+
             let teamOne = data2[defaultMatch]['teamOne']
-            let teamTwo = data2[defaultMatch]['teamTwo']
 
             let overNum = d['name']
             let teamName = d['team']
@@ -168,6 +173,10 @@ render = (data1, data2, selectedTeam) => {
             }
         })
         .on('mouseout', () => {
+
+            d3.selectAll('rect')
+                .style('opacity', 1)
+
             tooltip.transition().duration(500)
                 .on('end', () => tooltip.style('display', 'none'))
                 .style('opacity', 0);
