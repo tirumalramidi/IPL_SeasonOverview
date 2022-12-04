@@ -55,11 +55,16 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
         bbbrwbebff2 = ['Matches', 'Innings', 'Overs', 'Runs', 'Wickets', 'Average', 'Economy', 'Strike Rate', '4W', '5W']
 
         for (let i = 0; i < 10; i++) {
-            tempObject[bbbrwbebff1[i]] = bowlingObject.length != 0 ? parseInt(bowlingObject[0][bbbrwbebff2[i]]) : ''
+            if(bbbrwbebff2[i] == 'Average'){
+                tempObject[bbbrwbebff1[i]] = bowlingObject.length != 0 ? parseFloat(bowlingObject[0][bbbrwbebff2[i]]) : ''
+            }else{
+                tempObject[bbbrwbebff1[i]] = bowlingObject.length != 0 ? parseInt(bowlingObject[0][bbbrwbebff2[i]]) : ''
+            }
         }
-
-        masterArray.push(tempObject);
-
+        
+        if(bowlingObject.length > 0 || battingObject.length > 0){
+            masterArray.push(tempObject) ? (bowlingObject.length != 0 && bowlingObject[0]['Matches'] > 0 ) && (battingObject.length !=0 && battingObject[0]['Matches'] > 0) :'';
+        }
     }
 
     let scorecardData = data[3].filter(
