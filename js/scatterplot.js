@@ -244,7 +244,7 @@ generateScatterPlot = (data, selectedTeam) => {
                 }
             }
 
-            d3.selectAll('circle')
+            svg.selectAll('circle')
                 .style('fill', 'gray')
                 .style('opacity', 0.33)
 
@@ -296,9 +296,27 @@ generateScatterPlot = (data, selectedTeam) => {
         })
             .on('mouseout', function (event, d) {
 
-                d3.selectAll('circle')
-                    .style("fill", function (d) { return color(d['team']) })
-                    .style('opacity', 1)
+                svg.selectAll('circle')
+                    .style('fill', function (d) {
+                        if (fullSelectedTeams.length == 0) {
+                            return color(d['team'])
+                        }
+                        if (fullSelectedTeams.length != 0 && fullSelectedTeams.indexOf(d.team) > -1) {
+                            return color(d['team'])
+                        }
+                        else {
+                            return 'gray'
+                        }
+                    })
+                    .style('opacity', function (d) {
+                        if (fullSelectedTeams.length == 0)
+                            return 1
+                        if (fullSelectedTeams.length != 0 && fullSelectedTeams.indexOf(d.team) > -1)
+                            return 1
+                        else {
+                            return 0.2
+                        }
+                    });
 
                 tooltip.transition()
                     .duration(500)

@@ -1,6 +1,6 @@
 let match = "74"
 
-render = (data1, data2, selectedTeam) => {
+render = (data2) => {
 
     let selectSCData = [
         { "text": "Final" },
@@ -25,13 +25,17 @@ render = (data1, data2, selectedTeam) => {
 
     body.append('br')
 
+    if (matchSelected != null) {
+        match = matchSelected
+    }
+
     d3.select('#xscSelect')
         .on('change', function () {
 
             d3.selectAll("#scorecard > svg").remove();
 
             match = d3.select(this).property('value');
-            
+
             if (match == "Final") {
                 match = "74"
             }
@@ -52,8 +56,26 @@ render = (data1, data2, selectedTeam) => {
 
     function drawScorecard(match) {
 
+        let teamOneName = data2[match]['teamOne']
+        let teamTwoName = data2[match]['teamTwo']
+
         let teamNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Gaints", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
         let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
+
+        let teamOneColor = '#FF1493'
+        let teamTwoColor = '#87CEEB'
+
+        for (let i = 0; i < 10; i++) {
+            if (teamNames[i] == teamOneName) {
+                teamOneColor = teamColor[i]
+            }
+        }
+
+        for (let i = 0; i < 10; i++) {
+            if (teamNames[i] == teamTwoName) {
+                teamTwoColor = teamColor[i]
+            }
+        }
 
         let width = 600
         let height = 600
@@ -105,11 +127,11 @@ render = (data1, data2, selectedTeam) => {
 
         newBarGroups.append('rect')
             .attr('class', 'positive')
-            .attr('fill', '#FF1493');
+            .attr('fill', teamOneColor);
 
         newBarGroups.append('rect')
             .attr('class', 'negative')
-            .attr('fill', '#87CEEB');
+            .attr('fill', teamTwoColor);
 
         newBarGroups.merge(barGroups)
             .select('.positive')
@@ -292,7 +314,7 @@ render = (data1, data2, selectedTeam) => {
 
         svg.append("text")
             .attr("x", 150)
-            .attr("y", 700)
+            .attr("y", 690)
             .attr("class", "title")
             .text(data2[match]['teamOne'] + " " + result + " against " + data2[match]['teamTwo'] + " by " + Math.abs(10 - totalTeamTwoWickets) + " Wickets")
             .style('font-size', '20px');

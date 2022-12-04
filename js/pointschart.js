@@ -1,4 +1,6 @@
-generatePoints = (data, selectedTeam) => {
+let matchSelected
+
+generatePoints = (data, data2, selectedTeam, pointsArray) => {
 
     let selectData = [
         { "text": "Position" },
@@ -178,7 +180,7 @@ generatePoints = (data, selectedTeam) => {
 
             let shortNames = ["CSK", "DC", "GT", "KKR", "LSG", "MI", "PK", "RCB", "RR", "SRH"]
             let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
-            let homeStadiums = ["M.A.Chidambaram Stadium", "Arun Jaitley Ground", "", "Eden Gardens", "", "Wankhede Stadium", "PCA Stadium", "M.Chinnaswamy Stadium", "Sawai Mansingh Stadium", "Rajiv Gandhi International Cricket Stadium"]
+            let homeStadiums = ["M.A.Chidambaram Stadium", "Arun Jaitley Ground", "NA", "Eden Gardens", "NA", "Wankhede Stadium", "PCA Stadium", "M.Chinnaswamy Stadium", "Sawai Mansingh Stadium", "Rajiv Gandhi International Cricket Stadium"]
             let yearFounded = ["2008", "2008", "2021", "2008", "2021", "2008", "2008", "2008", "2008", "2012"]
             let trophiesWon = ["4", "0", "1", "2", "0", "5", "0", "0", "1", "2"]
             let fansWorldwide = ["32.8M", "13.8M", "2.6M", "25.1M", "2M", "32.2M", "14.2M", "25.7M", "10.2M", "12.2M"]
@@ -277,6 +279,67 @@ generatePoints = (data, selectedTeam) => {
                     .duration(500)
                     .on('end', () => tooltip.style('display', 'none'))
                     .style('opacity', 0);
+            });
+
+        svg.selectAll("myCircles")
+            .data(pointsArray)
+            .enter()
+            .append("circle")
+            .attr("fill", "red")
+            .attr("stroke", "none")
+            .attr("cx", function (d, i) {
+                if (d['Team'] == 'MI')
+                    return x(+d["Match"])
+                if (d['Team'] == 'CSK')
+                    return x(+d["Match"])
+                if (d['Team'] == 'KKR')
+                    return x(+d["Match"])
+                if (d['Team'] == 'GT')
+                    return x(+d["Match"])
+                if (d['Team'] == 'PK')
+                    return x(+d["Match"])
+                if (d['Team'] == 'RCB')
+                    return x(+d["Match"])
+                if (d['Team'] == 'DC')
+                    return x(+d["Match"])
+                if (d['Team'] == 'SRH')
+                    return x(+d["Match"])
+                if (d['Team'] == 'RR')
+                    return x(+d["Match"])
+                if (d['Team'] == 'LSG')
+                    return x(+d["Match"])
+            })
+            .attr("cy", function (d) {
+                if (d['Team'] == 'MI')
+                    return y(+d[variable])
+                if (d['Team'] == 'CSK')
+                    return y(+d[variable])
+                if (d['Team'] == 'KKR')
+                    return y(+d[variable])
+                if (d['Team'] == 'GT')
+                    return y(+d[variable])
+                if (d['Team'] == 'PK')
+                    return y(+d[variable])
+                if (d['Team'] == 'RCB')
+                    return y(+d[variable])
+                if (d['Team'] == 'DC')
+                    return y(+d[variable])
+                if (d['Team'] == 'SRH')
+                    return y(+d[variable])
+                if (d['Team'] == 'RR')
+                    return y(+d[variable])
+                if (d['Team'] == 'LSG')
+                    return y(+d[variable])
+            })
+            .attr("r", 5)
+            .attr('opacity', 0.7)
+            .on('mousedown', function (d, i) {
+                matchSelected = i['Match']
+                d3.selectAll("#scorecard > svg").remove();
+                d3.selectAll("#scorecard > select").remove();
+                d3.selectAll("#scorecard > span").remove();
+                d3.selectAll("#scorecard > br").remove();
+                render(data2)
             });
 
         svg.append("text")

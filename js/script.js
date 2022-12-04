@@ -71,6 +71,39 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
     },
         {});
 
+    groupedPointsData = data[4].reduce((group, score) => {
+        const { Teams } = score;
+        group[Teams] = group[Teams] ?? [];
+        group[Teams].push(score);
+        return group;
+    },
+        {});
+
+
+    const teams = Object.keys(groupedPointsData);
+
+    pointsArray =[]
+    for(let team in teams){
+        let wins = 0
+        let i = 1
+        let losses = 0
+        for (let match in groupedPointsData[teams[team]]){
+            tempObject = {}
+            if(groupedPointsData[teams[team]][match]['Wins'] > wins || groupedPointsData[teams[team]][match]['Losses'] > losses){
+                wins = groupedPointsData[teams[team]][match]['Wins']
+                losses = groupedPointsData[teams[team]][match]['Losses']
+                tempObject['Match'] = i
+                tempObject['Team'] = teams[team]
+                tempObject['Position'] = groupedPointsData[teams[team]][match]['Position']
+                tempObject['Wins'] = groupedPointsData[teams[team]][match]['Wins']
+                tempObject['Losses'] = groupedPointsData[teams[team]][match]['Losses']
+                tempObject['NRR'] = groupedPointsData[teams[team]][match]['NRR']
+                pointsArray.push(tempObject)
+            }
+            i++
+        }
+    }
+
     const masterScoreKeys = Object.keys(matchMater);
     const Overs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 
@@ -198,23 +231,25 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
             d3.selectAll("#scatterPlot > br").remove();
             generateScatterPlot(masterArray, selectedTeam)
 
-            d3.selectAll("#table > svg").remove();
-            generateTable(masterArray, selectedTeam)
+            d3.selectAll("#predictionTableHead > th > i").remove();
+            d3.selectAll("#predictionTableHead > tr").remove();
+            d3.selectAll("#predictionTableHead > td").remove();
+
+            generateTable(masterArray,selectedTeam)
             attachSortHandlers(selectedTeam)
 
             d3.selectAll("#scorecard > svg").remove();
             d3.selectAll("#scorecard > select").remove();
             d3.selectAll("#scorecard > span").remove();
             d3.selectAll("#scorecard > br").remove();
-            render(finalScoreSheet, seasonMaster, selectedTeam);
+            render(seasonMaster);
 
             d3.selectAll("#pointsHistory > svg").remove();
             d3.selectAll("#pointsHistory > select").remove();
             d3.selectAll("#pointsHistory > span").remove();
             d3.selectAll("#pointsHistory > br").remove();
-            generatePoints(data[4], selectedTeam)
-
-            generateTable(masterArray, 'none')
+            d3.selectAll("#pointsHistory > option").remove();
+            generatePoints(data[4], seasonMaster, selectedTeam, pointsArray)
         });
 
     })
@@ -223,6 +258,6 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
     generateScatterPlot(masterArray, [])
     generateTable(masterArray, [])
     attachSortHandlers([])
-    render(finalScoreSheet, seasonMaster, []);
-    generatePoints(data[4], [])
+    render(seasonMaster);
+    generatePoints(data[4], seasonMaster, [], pointsArray)
 })
