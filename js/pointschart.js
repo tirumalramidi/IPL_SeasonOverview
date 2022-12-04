@@ -1,4 +1,4 @@
-generatePoints = (data) => {
+generatePoints = (data, selectedTeam) => {
 
     let selectData = [
         { "text": "Position" },
@@ -124,8 +124,19 @@ generatePoints = (data) => {
             .enter()
             .append("path")
             .attr("fill", "none")
-            .attr("stroke", function (d) { return color(d.key) })
-            .attr("stroke-width", 1.5)
+            .attr("stroke", function (d) { 
+                if(selectedTeam == 'none')
+                    return color(d.key)
+                if(d.key == selectedTeam && selectedTeam != 'none')
+                    return color(d.key)
+                else
+                    return 'gray' })
+            .attr("stroke-width", function(d) {
+                if(d.key == selectedTeam && selectedTeam != 'none')
+                    return 1.5
+                else
+                    return 0.5
+            })
             .attr("d", function (d) {
                 if (varSelect == -1) {
                     console.log("Hello")
@@ -142,6 +153,13 @@ generatePoints = (data) => {
                 }
             })
             .attr("stroke-width", "2.5px")
+            .style('opacity',function (d) { 
+                if(selectedTeam == 'none')
+                    return 1
+                if(d.key == selectedTeam && selectedTeam != 'none')
+                    return 1
+                else
+                    return 0.2 })
             .on("mouseover", function (event, i, n) {
                 //console.log('MouseOver')
             })

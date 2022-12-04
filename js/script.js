@@ -8,11 +8,7 @@ window.onscroll = function () {
     }
 };
 
-$(document).ready(function () {
-    $("#nav-item li").click(function () {
-        selectedTeam = this.id
-    });
-})
+
 
 auctionData = d3.csv("./data/AuctionData.csv")
 battingData = d3.csv("./data/BattingStatistics.csv")
@@ -21,7 +17,7 @@ scorecardData = d3.csv("./data/BallByBall.csv")
 pointsData = d3.csv("./data/TeamPositions.csv")
 
 Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).then(data => {
-
+    // console.log("Came promise")
     masterArray = []
     ballBallArray = []
     maximumRowSize = [...Array(Math.max(data[0].length, data[1].length, data[2].length)).keys()]
@@ -40,7 +36,9 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
         tempObject["previousTeam"] = data[0][row]["2021 Squad"] != '' ? data[0][row]["2021 Squad"] : 'NA'
         tempObject["draft"] = data[0][row]["Retained / Draft Pick"] == 'Retained' || data[0][row]["Retained / Draft Pick"] == 'Draft Pick' ? data[0][row]["Retained / Draft Pick"] : 'Bought'
 
-        battingObject = data[1].filter(batting => batting['Player'] == data[0][row]['Player'])
+        battingObject = data[1].filter(batting => batting['Player'] === data[0][row]['Player'])
+        // console.log("batt",battingObject)
+        // console.log("batt",battingObject.filter(batting => batting['Player'] == 'Saurabh Dubey'));
 
         bbnrhbbscffs1 = ['batInnings', 'batMatches', 'notOut', 'runs', 'highScore', 'batAverage', 'ballsFaced', 'strikeRate', 'centuries', 'fifties', 'fours', 'sixes']
         bbnrhbbscffs2 = ['Innings', 'Matches', 'Not Out', 'Runs', 'High Score', 'Average', 'Balls Faced', 'Strike Rate', '100', '50', '4s', '6s']
@@ -55,7 +53,13 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
         bbbrwbebff2 = ['Matches', 'Innings', 'Overs', 'Runs', 'Wickets', 'Average', 'Economy', 'Strike Rate', '4W', '5W']
 
         for (let i = 0; i < 10; i++) {
-            tempObject[bbbrwbebff1[i]] = bowlingObject.length != 0 ? parseInt(bowlingObject[0][bbbrwbebff2[i]]) : ''
+            if(bbbrwbebff2[i] == 'Average'){
+                tempObject[bbbrwbebff1[i]] = bowlingObject.length != 0 ? +bowlingObject[0][bbbrwbebff2[i]] : ''
+
+            }else{
+
+                tempObject[bbbrwbebff1[i]] = bowlingObject.length != 0 ? parseInt(bowlingObject[0][bbbrwbebff2[i]]) : ''
+            }
         }
 
         masterArray.push(tempObject);
@@ -182,10 +186,38 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
         finalScoreSheet.push(scoreSheet)
     }
 
-    generateTeams()
-    generateScatterPlot(masterArray)
-    generateTable(masterArray)
-    attachSortHandlers()
-    render(finalScoreSheet,seasonMaster);
-    generatePoints(data[4])
+    $(document).ready(function () {
+        $("#nav-item li").click(function () {
+            selectedTeam = this.id
+
+            d3.selectAll("#teams > svg").remove();
+            generateTeams(selectedTeam)
+
+            d3.selectAll("#scatterPlot > svg").remove();
+            d3.selectAll("#scatterPlot > select").remove();
+            d3.selectAll("#scatterPlot > span").remove();
+            d3.selectAll("#scatterPlot > br").remove();
+            generateScatterPlot(masterArray,selectedTeam)
+
+            d3.selectAll("#table > svg").remove();
+            generateTable(masterArray,selectedTeam)
+            attachSortHandlers(selectedTeam)
+            
+            d3.selectAll("#scorecard > svg").remove();
+            render(finalScoreSheet,seasonMaster,selectedTeam);
+            
+            d3.selectAll("#pointsHistory > svg").remove();
+            d3.selectAll("#pointsHistory > select").remove();
+            d3.selectAll("#pointsHistory > span").remove();
+            d3.selectAll("#pointsHistory > br").remove();
+            generatePoints(data[4],selectedTeam)
+        });
+    })
+
+    generateTeams('none')
+    generateScatterPlot(masterArray,'none')
+    generateTable(masterArray,'none')
+    attachSortHandlers('none')
+    render(finalScoreSheet,seasonMaster,'none');
+    generatePoints(data[4],'none')
 })

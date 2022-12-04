@@ -1,7 +1,9 @@
 let newXData = "Average"
 let newYData = "Runs"
 
-generateScatterPlot = (data) => {
+generateScatterPlot = (data,selectedTeam) => {
+
+    console.log(data)
 
     let selectXData = [
         { "text": "Average" },
@@ -92,8 +94,19 @@ generateScatterPlot = (data) => {
             .style('display', 'none')
             .style('opacity', 0);
 
+        let shortNames = ["CSK", "DC", "GT", "KKR", "LSG", "MI", "PK", "RCB", "RR", "SRH"]
         let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
         let teamColors = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
+
+        let varTeam;
+
+        for(let i=0; i<10; i++){
+            if(shortNames[i] == selectedTeam){
+                varTeam = teamsNames[i]
+            }
+        }
+
+        console.log(varTeam)
 
         let margin = {
             top: 20,
@@ -154,21 +167,53 @@ generateScatterPlot = (data) => {
             .domain(teamsNames)
             .range(teamColors);
 
-        svg.append('g')
+        let xSvg = svg.append('g')
             .selectAll("dot")
             .data(data)
             .enter()
             .append("circle")
+            // .transition()
+            // .duration(20)
             .attr("cx", function (d) {
-                return xScale(d[xyData[varXSelected]]) != '' ? xScale(d[xyData[varXSelected]]) : 0;
+                //console.log("X",d[xyData[varXSelected]])
+                return (xScale(d[xyData[varXSelected]]) == '' || isNaN(xScale(d[xyData[varXSelected]]))) ? null : xScale(d[xyData[varXSelected]]);
             })
+            // .transition()
+            // .duration(2000)
             .attr("cy", function (d) {
-                return yScale(d[xyData[varYSelected]]) != '' ? yScale(d[xyData[varYSelected]]) : 0;
+                //console.log("Y",d[xyData[varYSelected]])
+                return (yScale(d[xyData[varYSelected]]) == '' || isNaN(yScale(d[xyData[varYSelected]]))) ?  null : yScale(d[xyData[varYSelected]]);
             })
             .attr("r", 6.0)
             .style("fill", function (d) { return color(d['team']) })
             .style('stroke', 'black')
-            .on("mouseover", function (event, d) {
+            .style('opacity', 0);
+
+
+            xSvg.transition()
+            .duration( function(d){
+                if(selectedTeam == 'none')
+                    return 2000
+                if(d.team == varTeam && varTeam != 'none')
+                    return 200
+                else
+                    return 200 })
+            .delay(function(d,i){ 
+                if(selectedTeam == 'none')
+                    return i * (20 / 4)
+                if(d.team == varTeam && varTeam != 'none')
+                    return 0
+                else
+                    return 0 })
+            .style('opacity', function (d) { 
+                if(selectedTeam == 'none')
+                    return 1
+                if(d.team == varTeam && varTeam != 'none')
+                    return 1
+                else
+                    return 0.2 });
+            
+            xSvg.on("mouseover", function (event, d) {
                 let varColor = ''
                 for (let i = 0; i < 10; i++) {
                     if (teamsNames[i] == d.team) {

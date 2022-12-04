@@ -1,4 +1,4 @@
-generateTeams = () => {
+generateTeams = (selectedTeam) => {
 
     let teamSelected = ''
 
