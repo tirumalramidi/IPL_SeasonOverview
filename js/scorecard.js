@@ -1,8 +1,5 @@
 render = (data1, data2, selectedTeam) => {
 
-    let teamNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Gaints", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
-    let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
-
     let width = 600
     let height = 600
     let labelArea = 100
@@ -11,7 +8,7 @@ render = (data1, data2, selectedTeam) => {
         top: 20,
         left: 20,
         right: 20,
-        bottom: 50
+        bottom: 100
     };
 
     let teamOneMaxRuns = d3.max(data1.map(d => d["teamOneRuns"]));
@@ -105,8 +102,9 @@ render = (data1, data2, selectedTeam) => {
                 .style('opacity', 1)
 
             let teamOne = data2[defaultMatch]['teamOne']
+            let teamTwo = data2[defaultMatch]['teamTwo']
 
-            let overNum = d['name']
+            overNum = d['name']
             let teamName = d['team']
 
             let match = data2[defaultMatch]['matchScorecard']
@@ -129,6 +127,7 @@ render = (data1, data2, selectedTeam) => {
                 .style("opacity", 0.75);
             tooltip.style('left', (event.pageX) + 'px')
                 .style('top', (event.pageY - 50) + 'px');
+
             tooltip.append('span')
                 .classed('tooltip-text', true)
                 .text('Wickets: ')
@@ -155,7 +154,7 @@ render = (data1, data2, selectedTeam) => {
                 tooltip.append('span')
                     .classed('tooltip-text', true)
                     .text(Object.keys(match[overNum][batsmanNo])[i] + ': ');
-    
+
                 if (Object.values(match[overNum][batsmanNo])[i] == 1) {
                     tooltip.append('span')
                         .classed('tooltip-text', true)
@@ -171,6 +170,16 @@ render = (data1, data2, selectedTeam) => {
                     tooltip.append('br');
                 }
             }
+
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Extras Runs: ')
+                .style('color', '#2A6592');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(data2[defaultMatch]['matchScorecard'][overNum]['extraRunsOne'])
+                .style('color', '#996600');
+            tooltip.append('br')
         })
         .on('mouseout', () => {
 
@@ -198,4 +207,39 @@ render = (data1, data2, selectedTeam) => {
         .attr("y", 15)
         .attr("class", "title")
         .text("Over");
+
+    svg.append("text")
+        .attr("x", 360)
+        .attr("y", 666)
+        .attr("class", "title")
+        .text("Runs");
+
+    let totalTeamOneRuns = 0
+    let totalTeamTwoRuns = 0
+
+    let totalTeamOneWickets = 0
+    let totalTeamTwoWickets = 0
+
+    for (let i = 0; i < 20; i++) {
+        totalTeamOneRuns = totalTeamOneRuns + data2[defaultMatch]['matchScorecard'][i]['totalRunsOne']
+        totalTeamTwoRuns = totalTeamTwoRuns + data2[defaultMatch]['matchScorecard'][i]['totalRunsTwo']
+        totalTeamOneWickets = totalTeamOneWickets + data2[defaultMatch]['matchScorecard'][i]['wicketsOne']
+        totalTeamTwoWickets = totalTeamTwoWickets + data2[defaultMatch]['matchScorecard'][i]['wicketsTwo']
+    }
+
+    let result = ""
+
+    if (defaultMatch % 2 == 1) {
+        result = "lost"
+    }
+    else {
+        result = "won"
+    }
+
+    svg.append("text")
+        .attr("x", 150)
+        .attr("y", 700)
+        .attr("class", "title")
+        .text(data2[defaultMatch]['teamOne'] + " " + result + " against " + data2[defaultMatch]['teamTwo'] + " by " + Math.abs(10 - totalTeamTwoWickets) + " Wickets")
+        .style('font-size', '20px');
 }

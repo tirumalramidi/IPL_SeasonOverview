@@ -73,7 +73,9 @@
 #navbar {
     width: 100%;
     float: left;
+    position: fixed;
     margin: 0 0 1em 0;
+    top: 0;
     padding: 0;
     background-color: #f2f2f2;
     border-bottom: 1px solid #ccc;
@@ -106,6 +108,10 @@
 #navbar li a:hover {
     color: black;
     background-color: #fff;
+}
+
+.nav-item.active {
+    color: white;
 }
 
 .tooltip {

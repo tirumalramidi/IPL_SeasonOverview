@@ -9,6 +9,12 @@ generatePoints = (data, selectedTeam) => {
 
     let body = d3.select('#pointsHistory')
 
+    let tooltip = d3.select('#pointsHistory')
+        .append('div')
+        .attr('class', 'tooltip')
+        .style('display', 'none')
+        .style('opacity', 0);
+
     var span = body.append('span')
         .text('What to display on Y-Axis: ')
 
@@ -119,27 +125,29 @@ generatePoints = (data, selectedTeam) => {
             .domain(res)
             .range(["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#FFD700", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"])
 
-        let line = svg.selectAll(".line")
+        let lines = svg.selectAll(".line")
             .data(sumstat)
             .enter()
             .append("path")
             .attr("fill", "none")
-            .attr("stroke", function (d) { 
-                if(selectedTeam == 'none')
+            .attr("stroke", function (d) {
+                if (selectedTeam.length == 0)
                     return color(d.key)
-                if(d.key == selectedTeam && selectedTeam != 'none')
+                if (selectedTeam.length != 0 && selectedTeam.indexOf(d.key) > -1)
                     return color(d.key)
-                else
-                    return 'gray' })
-            .attr("stroke-width", function(d) {
-                if(d.key == selectedTeam && selectedTeam != 'none')
+                else {
+                    return 'gray'
+                }
+            })
+            .attr("stroke-width", function (d) {
+                if (selectedTeam.length != 0 && selectedTeam.indexOf(d.key) > -1)
                     return 1.5
-                else
+                else {
                     return 0.5
+                }
             })
             .attr("d", function (d) {
                 if (varSelect == -1) {
-                    console.log("Hello")
                     return d3.line()
                         .x(function (d) { return x(+d["Matches"]); })
                         .y(function (d) { return y(+d["Position"]); })
@@ -153,21 +161,109 @@ generatePoints = (data, selectedTeam) => {
                 }
             })
             .attr("stroke-width", "2.5px")
-            .style('opacity',function (d) { 
-                if(selectedTeam == 'none')
+            .style('opacity', function (d) {
+                if (selectedTeam.length == 0)
                     return 1
-                if(d.key == selectedTeam && selectedTeam != 'none')
+                if (selectedTeam.length != 0 && selectedTeam.indexOf(d.key) > -1)
                     return 1
-                else
-                    return 0.2 })
-            .on("mouseover", function (event, i, n) {
-                //console.log('MouseOver')
+                else {
+                    return 0.2
+                }
             })
+
+        lines.on("mouseover", function (event, d) {
+
+            let shortNames = ["CSK", "DC", "GT", "KKR", "LSG", "MI", "PK", "RCB", "RR", "SRH"]
+            let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
+            let homeStadiums = ["M.A.Chidambaram Stadium", "Arun Jaitley Ground", "", "Eden Gardens", "", "Wankhede Stadium", "PCA Stadium", "M.Chinnaswamy Stadium", "Sawai Mansingh Stadium", "Rajiv Gandhi International Cricket Stadium"]
+            let yearFounded = ["2008", "2008", "2021", "2008", "2021", "2008", "2008", "2008", "2008", "2012"]
+            let trophiesWon = ["4", "0", "1", "2", "0", "5", "0", "0", "1", "2"]
+            let fansWorldwide = ["32.8M", "13.8M", "2.6M", "25.1M", "2M", "32.2M", "14.2M", "25.7M", "10.2M", "12.2M"]
+            let promPlayer = ["MS Dhoni", "Virender Sehwag", "Hardik Pandya", "Gautham Gambhir", "KL Rahul", "Rohit Sharma", "Yuvraj Singh", "Virat Kohli", "Shane Warne", "David Warner"]
+
+            for (let i = 0; i < 10; i++) {
+                if (d.key == shortNames[i]) {
+                    varTeam = teamsNames[i]
+                    home = homeStadiums[i]
+                    year = yearFounded[i]
+                    trophies = trophiesWon[i]
+                    fans = fansWorldwide[i]
+                    prom = promPlayer[i]
+                }
+            }
+
+            tooltip.text("");
+            tooltip.style("display", "block")
+                .transition().duration(200)
+                .style("opacity", 0.75);
+            tooltip.style('left', (event.pageX) + 'px')
+                .style('top', (event.pageY - 137) + 'px');
+
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Team: ')
+                .style('color', '#2A6592');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(varTeam)
+                .style('color', '#996600');
+            tooltip.append('br')
+
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Home Stadium: ')
+                .style('color', '#2A6592');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(home)
+                .style('color', '#996600');
+            tooltip.append('br')
+
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Team Founded in: ')
+                .style('color', '#2A6592');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(year)
+                .style('color', '#996600');
+            tooltip.append('br')
+
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Number of Trophies: ')
+                .style('color', '#2A6592');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(trophies)
+                .style('color', '#996600');
+            tooltip.append('br')
+
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Most Prominent Player in History: ')
+                .style('color', '#2A6592');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(prom)
+                .style('color', '#996600');
+            tooltip.append('br')
+
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text('Fans Worldwide: ')
+                .style('color', '#2A6592');
+            tooltip.append('span')
+                .classed('tooltip-text', true)
+                .text(fans)
+                .style('color', '#996600');
+            tooltip.append('br')
+        })
             .on("mouseout", function (d, i) {
-                //console.log('MouseOut')
-            })
-            .on("mousedown", function (d, i) {
-                //console.log('MouseDown')
+                tooltip.transition()
+                    .duration(500)
+                    .on('end', () => tooltip.style('display', 'none'))
+                    .style('opacity', 0);
             });
     }
 }

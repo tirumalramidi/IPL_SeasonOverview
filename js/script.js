@@ -1,14 +1,4 @@
-let selectedTeam = ''
-
-window.onscroll = function () {
-    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-        document.getElementById("navbar").style.top = "0";
-    } else {
-        document.getElementById("navbar").style.top = "-50px";
-    }
-};
-
-
+let selectedTeam = []
 
 auctionData = d3.csv("./data/AuctionData.csv")
 battingData = d3.csv("./data/BattingStatistics.csv")
@@ -17,7 +7,6 @@ scorecardData = d3.csv("./data/BallByBall.csv")
 pointsData = d3.csv("./data/TeamPositions.csv")
 
 Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).then(data => {
-    // console.log("Came promise")
     masterArray = []
     ballBallArray = []
     maximumRowSize = [...Array(Math.max(data[0].length, data[1].length, data[2].length)).keys()]
@@ -37,8 +26,6 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
         tempObject["draft"] = data[0][row]["Retained / Draft Pick"] == 'Retained' || data[0][row]["Retained / Draft Pick"] == 'Draft Pick' ? data[0][row]["Retained / Draft Pick"] : 'Bought'
 
         battingObject = data[1].filter(batting => batting['Player'] === data[0][row]['Player'])
-        // console.log("batt",battingObject)
-        // console.log("batt",battingObject.filter(batting => batting['Player'] == 'Saurabh Dubey'));
 
         bbnrhbbscffs1 = ['batInnings', 'batMatches', 'notOut', 'runs', 'highScore', 'batAverage', 'ballsFaced', 'strikeRate', 'centuries', 'fifties', 'fours', 'sixes']
         bbnrhbbscffs2 = ['Innings', 'Matches', 'Not Out', 'Runs', 'High Score', 'Average', 'Balls Faced', 'Strike Rate', '100', '50', '4s', '6s']
@@ -187,7 +174,20 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
 
     $(document).ready(function () {
         $("#nav-item li").click(function () {
-            selectedTeam = this.id
+
+            let varTeamSelected = this.id
+            let findTeam = selectedTeam.find(function (ele) {
+                return ele == varTeamSelected
+            })
+
+            if (!findTeam) {
+                selectedTeam.push(varTeamSelected)
+            }
+
+            if (this.id == 'clear') {
+                selectedTeam = []
+                fullSelectedTeams = []
+            }
 
             d3.selectAll("#teams > svg").remove();
             generateTeams(selectedTeam)
@@ -196,27 +196,30 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
             d3.selectAll("#scatterPlot > select").remove();
             d3.selectAll("#scatterPlot > span").remove();
             d3.selectAll("#scatterPlot > br").remove();
-            generateScatterPlot(masterArray,selectedTeam)
+            generateScatterPlot(masterArray, selectedTeam)
 
             d3.selectAll("#table > svg").remove();
-            generateTable(masterArray,selectedTeam)
+            generateTable(masterArray, selectedTeam)
             attachSortHandlers(selectedTeam)
-            
+
             d3.selectAll("#scorecard > svg").remove();
-            render(finalScoreSheet,seasonMaster,selectedTeam);
-            
+            render(finalScoreSheet, seasonMaster, selectedTeam);
+
             d3.selectAll("#pointsHistory > svg").remove();
             d3.selectAll("#pointsHistory > select").remove();
             d3.selectAll("#pointsHistory > span").remove();
             d3.selectAll("#pointsHistory > br").remove();
-            generatePoints(data[4],selectedTeam)
+            generatePoints(data[4], selectedTeam)
+
+            generateTable(masterArray, 'none')
         });
+
     })
 
-    generateTeams('none')
-    generateScatterPlot(masterArray,'none')
-    generateTable(masterArray,'none')
-    attachSortHandlers('none')
-    render(finalScoreSheet,seasonMaster,'none');
-    generatePoints(data[4],'none')
+    generateTeams([])
+    generateScatterPlot(masterArray, [])
+    generateTable(masterArray, [])
+    attachSortHandlers([])
+    render(finalScoreSheet, seasonMaster, []);
+    generatePoints(data[4], [])
 })

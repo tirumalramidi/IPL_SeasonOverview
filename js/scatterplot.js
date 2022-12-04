@@ -1,9 +1,9 @@
 let newXData = "Batting Average"
 let newYData = "Runs Scored"
 
-generateScatterPlot = (data,selectedTeam) => {
+let fullSelectedTeams = []
 
-    console.log(data)
+generateScatterPlot = (data, selectedTeam) => {
 
     let selectXData = [
         { "text": "Batting Average" },
@@ -94,7 +94,6 @@ generateScatterPlot = (data,selectedTeam) => {
             newYData = d3.select(this).property('value');
             drawScatterPlot(newXData, newYData);
         });
-
     function drawScatterPlot(xVar, yVar) {
 
         let tooltip = d3.select('#scatterPlot')
@@ -107,15 +106,19 @@ generateScatterPlot = (data,selectedTeam) => {
         let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
         let teamColors = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
 
-        let varTeam;
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                if (selectedTeam[i] == shortNames[j]) {
+                    let findTeam = fullSelectedTeams.find(function (ele) {
+                        return ele == teamsNames[j]
+                    })
 
-        for(let i=0; i<10; i++){
-            if(shortNames[i] == selectedTeam){
-                varTeam = teamsNames[i]
+                    if (!findTeam) {
+                        fullSelectedTeams.push(teamsNames[j])
+                    }
+                }
             }
         }
-
-        console.log(varTeam)
 
         let margin = {
             top: 20,
@@ -176,62 +179,77 @@ generateScatterPlot = (data,selectedTeam) => {
             .domain(teamsNames)
             .range(teamColors);
 
-        console.log(data)
-
         let dots = svg.append('g')
             .selectAll("dot")
             .data(data)
             .enter()
             .append("circle")
-            // .transition()
-            // .duration(20)
             .attr("cx", function (d) {
-                //console.log("X",d[xyData[varXSelected]])
                 return (xScale(d[xyData[varXSelected]]) == '' || isNaN(xScale(d[xyData[varXSelected]]))) ? null : xScale(d[xyData[varXSelected]]);
             })
-            // .transition()
-            // .duration(2000)
             .attr("cy", function (d) {
-                //console.log("Y",d[xyData[varYSelected]])
-                return (yScale(d[xyData[varYSelected]]) == '' || isNaN(yScale(d[xyData[varYSelected]]))) ?  null : yScale(d[xyData[varYSelected]]);
+                return (yScale(d[xyData[varYSelected]]) == '' || isNaN(yScale(d[xyData[varYSelected]]))) ? null : yScale(d[xyData[varYSelected]]);
             })
             .attr("r", 6.0)
             .style("fill", function (d) { return color(d['team']) })
             .style('stroke', 'black')
             .style('opacity', 0);
 
-
-            dots.transition()
-            .duration( function(d){
-                if(selectedTeam == 'none')
+        dots.transition()
+            .duration(function (d) {
+                if (fullSelectedTeams.length == 0)
                     return 2000
-                if(d.team == varTeam && varTeam != 'none')
+                if (fullSelectedTeams.length != 0 && fullSelectedTeams.indexOf(d.team) > -1)
                     return 200
                 else
-                    return 200 })
-            .delay(function(d,i){ 
-                if(selectedTeam == 'none')
+                    return 200
+            })
+            .delay(function (d, i) {
+                if (fullSelectedTeams.length == 0)
                     return i * (20 / 4)
-                if(d.team == varTeam && varTeam != 'none')
+                if (fullSelectedTeams.length != 0 && fullSelectedTeams.indexOf(d.team) > -1)
                     return 0
                 else
-                    return 0 })
-            .style('opacity', function (d) { 
-                if(selectedTeam == 'none')
+                    return 0
+            })
+            .style('opacity', function (d) {
+                if (fullSelectedTeams.length == 0)
                     return 1
-                if(d.team == varTeam && varTeam != 'none')
+                if (fullSelectedTeams.length != 0 && fullSelectedTeams.indexOf(d.team) > -1)
                     return 1
-                else
-                    return 0.2 });
-            
-            dots.on("mouseover", function (event, d) {
-                let varColor = ''
-                for (let i = 0; i < 10; i++) {
-                    if (teamsNames[i] == d.team) {
-                        varColor = teamColors[i]
-                    }
+                else {
+                    return 0.2
                 }
-    
+            })
+            .style('fill', function (d) {
+                if (fullSelectedTeams.length == 0) {
+                    return color(d['team'])
+                }
+                if (fullSelectedTeams.length != 0 && fullSelectedTeams.indexOf(d.team) > -1) {
+                    return color(d['team'])
+                }
+                else {
+                    return 'gray'
+                }
+            });
+
+        dots.on("mouseover", function (event, d) {
+
+            let varColor = ''
+
+            for (let i = 0; i < 10; i++) {
+                if (teamsNames[i] == d.team) {
+                    varColor = teamColors[i]
+                }
+            }
+
+            d3.selectAll('circle')
+                .style('fill', 'gray')
+                .style('opacity', 0.33)
+
+            d3.select(this)
+                .style("fill", function (d) { return color(d['team']) })
+                .style('opacity', 1)
 
             tooltip.text("");
             tooltip.style("display", "block")
@@ -239,6 +257,7 @@ generateScatterPlot = (data,selectedTeam) => {
                 .style("opacity", 0.75);
             tooltip.style('left', (event.pageX) + 'px')
                 .style('top', (event.pageY - 100) + 'px');
+
             tooltip.append('span')
                 .classed('tooltip-text', true)
                 .text('Player: ');
@@ -247,6 +266,7 @@ generateScatterPlot = (data,selectedTeam) => {
                 .text(d.player)
                 .style('color', '#996600');
             tooltip.append('br');
+
             tooltip.append('span')
                 .classed('tooltip-text', true)
                 .text('Team: ');
@@ -255,6 +275,7 @@ generateScatterPlot = (data,selectedTeam) => {
                 .text(d.team)
                 .style('color', '#996600');
             tooltip.append('br');
+
             tooltip.append('span')
                 .classed('tooltip-text', true)
                 .text(xySelect[varXSelected] + ': ');
@@ -263,6 +284,7 @@ generateScatterPlot = (data,selectedTeam) => {
                 .text(d[xyData[varXSelected]])
                 .style('color', '#996600');
             tooltip.append('br');
+
             tooltip.append('span')
                 .classed('tooltip-text', true)
                 .text(xySelect[varYSelected] + ': ');
@@ -273,7 +295,8 @@ generateScatterPlot = (data,selectedTeam) => {
         })
             .on('mouseout', () => {
 
-                svg.selectAll('circle')
+                d3.selectAll('circle')
+                    .style("fill", function (d) { return color(d['team']) })
                     .style('opacity', 1)
 
                 tooltip.transition()
