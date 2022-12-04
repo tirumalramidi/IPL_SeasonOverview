@@ -203,6 +203,9 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
             attachSortHandlers(selectedTeam)
 
             d3.selectAll("#scorecard > svg").remove();
+            d3.selectAll("#scorecard > select").remove();
+            d3.selectAll("#scorecard > span").remove();
+            d3.selectAll("#scorecard > br").remove();
             render(finalScoreSheet, seasonMaster, selectedTeam);
 
             d3.selectAll("#pointsHistory > svg").remove();

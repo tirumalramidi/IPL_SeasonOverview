@@ -94,6 +94,7 @@ generateScatterPlot = (data, selectedTeam) => {
             newYData = d3.select(this).property('value');
             drawScatterPlot(newXData, newYData);
         });
+
     function drawScatterPlot(xVar, yVar) {
 
         let tooltip = d3.select('#scatterPlot')
@@ -121,10 +122,10 @@ generateScatterPlot = (data, selectedTeam) => {
         }
 
         let margin = {
-            top: 20,
-            right: 30,
-            bottom: 30,
-            left: 30
+            top: 25,
+            left: 75,
+            right: 25,
+            bottom: 75
         }
 
         width = 750 - margin.left - margin.right;
@@ -293,7 +294,7 @@ generateScatterPlot = (data, selectedTeam) => {
                 .text(d[xyData[varYSelected]])
                 .style('color', '#996600');
         })
-            .on('mouseout', () => {
+            .on('mouseout', function (event, d) {
 
                 d3.selectAll('circle')
                     .style("fill", function (d) { return color(d['team']) })
@@ -304,5 +305,18 @@ generateScatterPlot = (data, selectedTeam) => {
                     .on('end', () => tooltip.style('display', 'none'))
                     .style('opacity', 0);
             });
+
+        svg.append("text")
+            .attr("x", 250)
+            .attr("y", 545)
+            .attr("class", "title")
+            .text(newXData);
+
+        svg.append("text")
+            .attr("x", -300)
+            .attr("y", -45)
+            .attr('transform', 'rotate(-90)')
+            .attr("class", "label")
+            .text(newYData);
     }
 }

@@ -63,10 +63,10 @@ generatePoints = (data, selectedTeam) => {
         variable = xOrigData[varSelect]
 
         let margin = {
-            top: 10,
-            right: 30,
-            bottom: 30,
-            left: 60
+            top: 25,
+            left: 75,
+            right: 25,
+            bottom: 75
         }
 
         let width = 800 - margin.left - margin.right;
@@ -139,13 +139,6 @@ generatePoints = (data, selectedTeam) => {
                     return 'gray'
                 }
             })
-            .attr("stroke-width", function (d) {
-                if (selectedTeam.length != 0 && selectedTeam.indexOf(d.key) > -1)
-                    return 1.5
-                else {
-                    return 0.5
-                }
-            })
             .attr("d", function (d) {
                 if (varSelect == -1) {
                     return d3.line()
@@ -172,6 +165,16 @@ generatePoints = (data, selectedTeam) => {
             })
 
         lines.on("mouseover", function (event, d) {
+
+            if (selectedTeam.length == 0) {
+                d3.selectAll('path')
+                    .attr('stroke', 'gray')
+                    .attr('opacity', 0.2);
+
+                d3.select(this)
+                    .attr('stroke', color(d.key))
+                    .attr('opacity', 1);
+            }
 
             let shortNames = ["CSK", "DC", "GT", "KKR", "LSG", "MI", "PK", "RCB", "RR", "SRH"]
             let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
@@ -260,10 +263,33 @@ generatePoints = (data, selectedTeam) => {
             tooltip.append('br')
         })
             .on("mouseout", function (d, i) {
+
+                if (selectedTeam.length == 0) {
+                    d3.selectAll('path')
+                        .attr("stroke", function (d) {
+                            if (d != null)
+                                return color(d.key);
+                        })
+                        .attr('opacity', 1)
+                }
+
                 tooltip.transition()
                     .duration(500)
                     .on('end', () => tooltip.style('display', 'none'))
                     .style('opacity', 0);
             });
+
+        svg.append("text")
+            .attr("x", 300)
+            .attr("y", 540)
+            .attr("class", "title")
+            .text("Match");
+
+        svg.append("text")
+            .attr("x", -300)
+            .attr("y", -40)
+            .attr('transform', 'rotate(-90)')
+            .attr("class", "label")
+            .text(newData);
     }
 }
