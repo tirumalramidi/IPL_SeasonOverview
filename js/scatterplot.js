@@ -171,24 +171,20 @@ generateScatterPlot = (data) => {
             .enter()
             .append("circle")
             .attr("cx", function (d) {
-                if (d[xyData[varXSelected]] != '' && d[xyData[varYSelected]] != '') {
-                    return xScale(d[xyData[varXSelected]])
-                }
+                return xScale(d[xyData[varXSelected]])
             })
             .attr("cy", function (d) {
-                if (d[xyData[varXSelected]] != '' && d[xyData[varYSelected]] != '') {
-                    return yScale(d[xyData[varYSelected]])
-                }
+                return yScale(d[xyData[varYSelected]])
             })
             .attr("r", 6.0)
             .style("fill", function (d) { return color(d['team']) })
             .style('stroke', 'black')
-            .style('opacity', 1);
+            .style('opacity', 0);
 
-        // dots.transition()
-        //     .duration(2000)
-        //     .delay(function (d, i) { return (5 * i); })
-        //     .style('opacity', 1);
+        dots.transition()
+            .duration(2000)
+            .delay(function (d, i) { return (5 * i); })
+            .style('opacity', 1);
 
         dots.on("mouseover", function (event, d) {
 
