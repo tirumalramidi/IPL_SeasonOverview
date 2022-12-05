@@ -262,13 +262,14 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
             d3.selectAll("#scatterPlot > select").remove();
             d3.selectAll("#scatterPlot > span").remove();
             d3.selectAll("#scatterPlot > br").remove();
+            d3.selectAll("#scatterLegend > svg").remove();
             generateScatterPlot(masterArray, selectedTeam)
 
             d3.selectAll("#scorecard > svg").remove();
             d3.selectAll("#scorecard > select").remove();
             d3.selectAll("#scorecard > span").remove();
             d3.selectAll("#scorecard > br").remove();
-            render(seasonMaster);
+            generateScorecard(seasonMaster);
 
             d3.selectAll("#pointsHistory > svg").remove();
             d3.selectAll("#pointsHistory > select").remove();
@@ -282,6 +283,6 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
 
     generateTeams([])
     generateScatterPlot(masterArray, [])
-    render(seasonMaster);
+    generateScorecard(seasonMaster);
     generatePoints(data[4], seasonMaster, [], pointsArray)
 })

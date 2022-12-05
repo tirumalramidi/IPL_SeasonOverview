@@ -259,7 +259,7 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                     .duration(500)
                     .on('end', () => tooltip.style('display', 'none'))
                     .style('opacity', 0);
-                   
+
             });
 
         let circles = svg.selectAll("myCircles")
@@ -362,6 +362,7 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                     .attr('stroke', 'red')
                     .attr('opacity', 0.7)
                     .attr("r", 5);
+                    
                 svg.selectAll('path')
                     .attr('stroke', function (d) {
                         if (d != null)
@@ -418,19 +419,8 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                 d3.selectAll("#scorecard > select").remove();
                 d3.selectAll("#scorecard > span").remove();
                 d3.selectAll("#scorecard > br").remove();
-                render(data2)
+                generateScorecard(data2)
             });
-        function tweenDash() {
-            const l = this.getTotalLength(),
-                i = d3.interpolateString("0," + l, l + "," + l);
-            return function(t) { return i(t) };
-            }
-        function transition(path) {
-            path.transition()
-                .duration(3500)
-                .attrTween("stroke-dasharray", tweenDash)
-                .on("end", () => { d3.select(this).call(transition); });
-            }
 
         function tweenDash() {
             const l = this.getTotalLength(),
