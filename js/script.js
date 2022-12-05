@@ -79,17 +79,16 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
     },
         {});
 
-
     const teams = Object.keys(groupedPointsData);
 
-    pointsArray =[]
-    for(let team in teams){
+    pointsArray = []
+    for (let team in teams) {
         let wins = 0
         let i = 1
         let losses = 0
-        for (let match in groupedPointsData[teams[team]]){
+        for (let match in groupedPointsData[teams[team]]) {
             tempObject = {}
-            if(groupedPointsData[teams[team]][match]['Wins'] > wins || groupedPointsData[teams[team]][match]['Losses'] > losses){
+            if (groupedPointsData[teams[team]][match]['Wins'] > wins || groupedPointsData[teams[team]][match]['Losses'] > losses) {
                 wins = groupedPointsData[teams[team]][match]['Wins']
                 losses = groupedPointsData[teams[team]][match]['Losses']
                 tempObject['Match'] = i
@@ -207,6 +206,26 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
 
     $(document).ready(function () {
         $("#nav-item li").click(function () {
+            clickedTeam = this.id
+
+            let shortNames = ["CSK", "DC", "GT", "KKR", "LSG", "MI", "PK", "RCB", "RR", "SRH"]
+            let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
+            let homeStadiums = ["M.A.Chidambaram Stadium", "Arun Jaitley Ground", "Narendra Modi Stadium", "Eden Gardens", "Shri Atal Bihari Vajpayee Ekana Cricket Stadium", "Wankhede Stadium", "PCA Stadium", "M.Chinnaswamy Stadium", "Sawai Mansingh Stadium", "Rajiv Gandhi International Cricket Stadium"]
+            let yearFounded = ["2008", "2008", "2021", "2008", "2021", "2008", "2008", "2008", "2008", "2012"]
+            let trophiesWon = ["4", "0", "1", "2", "0", "5", "0", "0", "1", "2"]
+            let fansWorldwide = ["32.8M", "13.8M", "2.6M", "25.1M", "2M", "32.2M", "14.2M", "25.7M", "10.2M", "12.2M"]
+            let promPlayer = ["MS Dhoni", "Virender Sehwag", "Hardik Pandya", "Gautham Gambhir", "KL Rahul", "Rohit Sharma", "Yuvraj Singh", "Virat Kohli", "Shane Warne", "David Warner"]
+
+            for (let i = 0; i < 10; i++) {
+                if (clickedTeam == shortNames[i]) {
+                    varTeam = teamsNames[i]
+                    home = homeStadiums[i]
+                    year = yearFounded[i]
+                    trophies = trophiesWon[i]
+                    prom = promPlayer[i]
+                    fans = fansWorldwide[i]
+                }
+            }
 
             let varTeamSelected = this.id
             let findTeam = selectedTeam.find(function (ele) {
@@ -217,9 +236,23 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
                 selectedTeam.push(varTeamSelected)
             }
 
+            let iplData = document.querySelectorAll("h5")
+
+            iplData[0].innerText = "Home Stadium: " + home
+            iplData[1].innerText = "Founded In: " + year
+            iplData[2].innerText = "Trophies: " + trophies
+            iplData[3].innerText = "Most Promiment Player is History: " + prom
+            iplData[4].innerText = "Fans Worldwide: " + fans
+
             if (this.id == 'clear') {
                 selectedTeam = []
                 fullSelectedTeams = []
+
+                iplData[0].innerText = "Home Stadium: "
+                iplData[1].innerText = "Founded In: "
+                iplData[2].innerText = "Trophies: "
+                iplData[3].innerText = "Most Promiment Player is History: "
+                iplData[4].innerText = "Fans Worldwide: "
             }
 
             d3.selectAll("#teams > svg").remove();
@@ -230,13 +263,6 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
             d3.selectAll("#scatterPlot > span").remove();
             d3.selectAll("#scatterPlot > br").remove();
             generateScatterPlot(masterArray, selectedTeam)
-
-            d3.selectAll("#predictionTableHead > th > i").remove();
-            d3.selectAll("#predictionTableHead > tr").remove();
-            d3.selectAll("#predictionTableHead > td").remove();
-
-            generateTable(masterArray,selectedTeam)
-            attachSortHandlers(selectedTeam)
 
             d3.selectAll("#scorecard > svg").remove();
             d3.selectAll("#scorecard > select").remove();
@@ -256,8 +282,6 @@ Promise.all([auctionData, battingData, bowlingData, scorecardData, pointsData]).
 
     generateTeams([])
     generateScatterPlot(masterArray, [])
-    generateTable(masterArray, [])
-    attachSortHandlers([])
     render(seasonMaster);
     generatePoints(data[4], seasonMaster, [], pointsArray)
 })

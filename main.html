@@ -26,7 +26,6 @@
 </head>
 
 <body style="padding-left: 20px">
-
     <div id="navbar">
         <ul id="nav-item">
             <li id='CSK'><a>CSK</a></li>
@@ -51,27 +50,24 @@
                 <div id="teams"></div>
             </div>
         </div>
+        <div class="infoDivision" style="display:flex; margin-top: -25px">
+            <div class="chart">
+                <h6>The IPL 2022 Season has been different from the previous season. Firstly, two teams, namely, Gujarat Titans and Lucknow Super Giants, have been added this year. Additionally, the league format has changed from the previous years, i.e., the teams are split into two groups, and every team in the group plays against the other team in the group twice and against teams in the other group once. Furthermore, the two most successful, namely Mumbai Indians and Chennai Super Kings, finished at the bottom of the points table for the first ever time. Since the start of IPL, only two teams have won it on the first try, i.e., Rajasthan Royals in 2008 and Gujarat Titans in 2022. Moreover, Gujarat Titans were never considered a contender; however, they defied all odds to win the trophy, like Leicester City in the 2016 Premier League Season.</h6>
+            </div>
+        </div>
         <div class="rowDivision" style="display:flex; margin-top: 15px">
             <div class="chart">
                 <h2>Teams Progression</h2>
                 <div id="pointsHistory"></div>
             </div>
-            <div>
-                <h6>Now, lets take a look at the Points History of every single team after every match of the IPL 2022
-                    Season</h6>
-                <h6>Additionally, you can change at the metrics you want to see by using </h6>
-            </div>
-        </div>
-        <br>
-        <div class="rowDivision" style="display:flex; margin-top: 15px">
-            <div>
-                <h6>Now, lets take a look at the Points History of every single team after every match of the IPL 2022
-                    Season</h6>
-                <h6>Additionally, you can change at the metrics you want to see by using </h6>
-            </div>
-            <div class="chart">
-                <h2>Player Statistics</h2>
-                <div id="scatterPlot"></div>
+            <div id = "iplData" class="textData">
+                <br>
+                <h2 class="summary" style="color: #996600;">IPL Teams Summary</h2>
+                <h5 class="homeStadium">First Place: Gujarat Titans</h5>
+                <h5 class="foundedIn">Last Place: Mumbai Indians</h5>
+                <h5 class="trophiesWon">Highest NNR: Rajasthan Royals</h5>
+                <h5 class="playerHistory">Longest Winstreak: 6 | Sunrisers Hyderabad</h5>
+                <h5 class="fansWorldwide">Longest Lossstreak: 8 | Mumbai Indians</h5>
             </div>
         </div>
         <br>
@@ -80,33 +76,41 @@
                 <h2>Match Overview</h2>
                 <div id="scorecard"></div>
             </div>
-            <div>
-                <h6>Now, lets take a look at the Points History of every single team after every match of the IPL 2022
-                    Season</h6>
-                <h6>Additionally, you can change at the metrics you want to see by using </h6>
+            <div id = "iplData" class="textData">
+                <br>
+                <h2 class="summary" style="color: #996600;">Match Summary</h2>
+                <h5 class="homeStadium">Venue: Sawai Mansingh Stadium</h5>
+                <h5 class="attendance">Attendance: 34963</h5>
+                <h5 class="foundedIn">Total Runs Scored: 263</h5>
+                <h5 class="trophiesWon">Total Wickets: 12</h5>
+                <h5 class="playerHistory">Total Extras: 18</h5>
+            </div>
+        </div>
+        <br><br><br><br><br>
+        <div class="rowDivision" style="display:flex; margin-top: 15px">
+            <div class="chart">
+                <h2>Player Statistics</h2>
+                <div id="scatterPlot"></div>
+            </div>
+            <div id = "iplData" class="textData">
+                <div><br>
+                    <h2 class="summary" style="color: #996600;">Players Summary</h2>
+                    <h5 class="orangeCap">Orange Cap: Jos Buttler</h5>
+                    <h5 class="purpleCap">Purple Cap: Yuzvendra Chahal</h5>
+                    <h5 class="highestSR">Highest Strikerate: Pat Cummins</h5>
+                    <h5 class="mostSixes">Most Sixes Hit: Jos Buttler</h5>
+                    <h5 class="mostFours">Most Fours Hit: Jos Buttler</h5>
+                    <h5 class="mostHatricks">Most Hatricks: Yuzvendra Chahal</h5>
+                    <h5></h5>
+                    <h5></h5>
+                </div>
+                <br><br><br>
+                <div id="scatterLegend">
+                    
+                </div>
             </div>
         </div>
         <br>
-        <!-- <div class="rowDivision" style="display:flex; margin-top: 15px">
-            <div>
-                <h6>Now, lets take a look at the Points History of every single team after every match of the IPL 2022
-                    Season</h6>
-                <h6>Additionally, you can change at the metrics you want to see by using </h6>
-            </div>
-            <div class="chart">
-                <h2>Transfer Activity</h2>
-                <div id="table">
-                    <table id="table-element" style="flex-grow: 1">
-                        <thead id="predictionTableHead">
-                        </thead>
-                        <tbody id="predictionTableBody" style="line-height:1">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div> -->
     </div>
-
 </body>
-
 </html>

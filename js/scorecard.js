@@ -3,6 +3,7 @@ let match = "74"
 render = (data2) => {
 
     let selectSCData = [
+        { "text": "Default" },
         { "text": "Final" },
         { "text": "Qualifier 2" },
         { "text": "Eliminator" },
@@ -36,20 +37,57 @@ render = (data2) => {
 
             match = d3.select(this).property('value');
 
-            if (match == "Final") {
-                match = "74"
-            }
-            else if (match == "Qualifier 2") {
+            if(match == "Default"){
                 match = "73"
             }
-            else if (match == "Eliminator") {
+            else if (match == "Final") {
+                match = "73"
+            }
+            else if (match == "Qualifier 2") {
                 match = "72"
             }
-            else if (match == "Qualifier 1") {
+            else if (match == "Eliminator") {
                 match = "71"
             }
+            else if (match == "Qualifier 1") {
+                match = "70"
+            }
 
-            drawScorecard(`${match - 1}`);
+            playoffsMatch = +match
+
+            let teamOneMatchName = data2[playoffsMatch]['teamOne']
+
+            let shortNames = ["CSK", "DC", "GT", "KKR", "LSG", "MI", "PK", "RCB", "RR", "SRH"]
+            let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
+            let homeStadiums = ["M.A.Chidambaram Stadium", "Arun Jaitley Ground", "Narendra Modi Stadium", "Eden Gardens", "Shri Atal Bihari Vajpayee Ekana Cricket Stadium", "Wankhede Stadium", "PCA Stadium", "M.Chinnaswamy Stadium", "Sawai Mansingh Stadium", "Rajiv Gandhi International Cricket Stadium"]
+            let attendanceStadiums = ["48193", "32398", "38172", "42664", "34584", "52348", "30774", "45636", "34963", "44182"]
+
+            let totalRuns = 0
+            let totalWickets = 0
+            let totalExtras = 0
+
+            for (let i = 0; i < 20; i++) {
+                totalRuns = totalRuns + data2[playoffsMatch]['matchScorecard'][i]['totalRunsOne'] + data2[playoffsMatch]['matchScorecard'][i]['totalRunsTwo']
+                totalWickets = totalWickets + data2[playoffsMatch]['matchScorecard'][i]['wicketsOne'] + data2[playoffsMatch]['matchScorecard'][i]['wicketsTwo']
+                totalExtras = totalExtras + data2[playoffsMatch]['matchScorecard'][i]['extraRunsOne'] + data2[playoffsMatch]['matchScorecard'][i]['extraRunsOne']
+            }
+
+            for (let i = 0; i < 10; i++) {
+                if (teamOneMatchName == teamsNames[i]) {
+                    home = homeStadiums[i]
+                    attendance = attendanceStadiums[i]
+                }
+            }
+
+            let iplData = document.querySelectorAll("h5")
+
+            iplData[5].innerText = "Venue: " + home
+            iplData[6].innerText = "Attendance: " + attendance
+            iplData[7].innerText = "Total Runs Scored: " + totalRuns
+            iplData[8].innerText = "Total Wickets Taken: " + totalWickets
+            iplData[9].innerText = "Total Extras: " + totalExtras
+
+            drawScorecard(match);
         });
 
     drawScorecard(`${match - 1}`);
@@ -60,7 +98,7 @@ render = (data2) => {
         let teamTwoName = data2[match]['teamTwo']
 
         let teamNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Gaints", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
-        let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
+        let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#8B008B", "#00FFFF", "#0000FF", "#8B0000", "#ADFF2F", "#FF1493", "#FF8C00"]
 
         let teamOneColor = '#FF1493'
         let teamTwoColor = '#87CEEB'
@@ -163,14 +201,18 @@ render = (data2) => {
             .attr('class', 'name')
             .text(function (d) { return +d['over'] + 1; });
 
-        newBarGroups.selectAll('rect')
-            .attr('x', d => d.team == data2[match]['teamOne'] ? x(0) + labelArea / 2 : x(d.value) - labelArea / 2)
-            .attr('y', d => y(d.name))
-            .attr('width', d => {
-                return d.team == data2[match]['teamOne'] ? x(d.value) - x(0) : x(0) - x(d.value)
-            })
-            .attr('height', y.bandwidth())
-            .on("mouseover", function (event, d) {
+        let rectangles = newBarGroups.selectAll('rect')
+        .attr('width', d => {
+            return d.team == data2[match]['teamOne'] ? x(d.value) - x(0) : x(0) - x(d.value)
+        })
+        .attr('height', y.bandwidth())
+        .attr('y', d => y(d.name))
+        rectangles
+        .transition()
+        .duration(2000)
+        .attr('x', d => d.team == data2[match]['teamOne'] ? x(0) + labelArea / 2 : x(d.value) - labelArea / 2)
+
+        rectangles.on("mouseover", function (event, d) {
 
                 d3.selectAll('rect')
                     .style('opacity', 0.33)

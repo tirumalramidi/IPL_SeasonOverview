@@ -1,4 +1,5 @@
 let matchSelected
+let nodeSelected = 'false'
 
 generatePoints = (data, data2, selectedTeam, pointsArray) => {
 
@@ -125,7 +126,7 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
 
         let color = d3.scaleOrdinal()
             .domain(res)
-            .range(["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#FFD700", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"])
+            .range(["#FFFF00", "#191970", "#87CEEB", "#8B008B", "#00FFFF", "#0000FF", "#8B0000", "#ADFF2F", "#FF1493", "#FF8C00"])
 
         let lines = svg.selectAll(".line")
             .data(sumstat)
@@ -141,6 +142,7 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                     return 'gray'
                 }
             })
+            .call(transition)
             .attr("d", function (d) {
                 if (varSelect == -1) {
                     return d3.line()
@@ -166,43 +168,43 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                 }
             })
 
-        lines.on("mouseover", function (event, d) {
+        lines.on("mouseover", function (event, id) {
 
             if (selectedTeam.length == 0) {
-                d3.selectAll('path')
+                svg.selectAll('path')
                     .attr('stroke', 'gray')
                     .attr('opacity', 0.2);
 
                 d3.select(this)
-                    .attr('stroke', color(d.key))
+                    .attr('stroke', color(id.key))
                     .attr('opacity', 1);
+
+                svg.selectAll('circle')
+                    .attr('stroke', function (d) {
+                        if (d != null)
+                            return id.key == d['Team'] ? 'red' : 'gray'
+                    })
+                    .attr('opacity', function (d) {
+                        if (d != null)
+                            return id.key == d['Team'] ? 1 : 0.2
+                    });
             }
 
             let shortNames = ["CSK", "DC", "GT", "KKR", "LSG", "MI", "PK", "RCB", "RR", "SRH"]
             let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
-            let homeStadiums = ["M.A.Chidambaram Stadium", "Arun Jaitley Ground", "NA", "Eden Gardens", "NA", "Wankhede Stadium", "PCA Stadium", "M.Chinnaswamy Stadium", "Sawai Mansingh Stadium", "Rajiv Gandhi International Cricket Stadium"]
-            let yearFounded = ["2008", "2008", "2021", "2008", "2021", "2008", "2008", "2008", "2008", "2012"]
-            let trophiesWon = ["4", "0", "1", "2", "0", "5", "0", "0", "1", "2"]
-            let fansWorldwide = ["32.8M", "13.8M", "2.6M", "25.1M", "2M", "32.2M", "14.2M", "25.7M", "10.2M", "12.2M"]
-            let promPlayer = ["MS Dhoni", "Virender Sehwag", "Hardik Pandya", "Gautham Gambhir", "KL Rahul", "Rohit Sharma", "Yuvraj Singh", "Virat Kohli", "Shane Warne", "David Warner"]
 
             for (let i = 0; i < 10; i++) {
-                if (d.key == shortNames[i]) {
+                if (id.key == shortNames[i]) {
                     varTeam = teamsNames[i]
-                    home = homeStadiums[i]
-                    year = yearFounded[i]
-                    trophies = trophiesWon[i]
-                    fans = fansWorldwide[i]
-                    prom = promPlayer[i]
                 }
             }
 
             tooltip.text("");
             tooltip.style("display", "block")
                 .transition().duration(200)
-                .style("opacity", 0.75);
+                .style("opacity", 0.9);
             tooltip.style('left', (event.pageX) + 'px')
-                .style('top', (event.pageY - 137) + 'px');
+                .style('top', (event.pageY - 33) + 'px');
 
             tooltip.append('span')
                 .classed('tooltip-text', true)
@@ -213,66 +215,21 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                 .text(varTeam)
                 .style('color', '#996600');
             tooltip.append('br')
-
-            tooltip.append('span')
-                .classed('tooltip-text', true)
-                .text('Home Stadium: ')
-                .style('color', '#2A6592');
-            tooltip.append('span')
-                .classed('tooltip-text', true)
-                .text(home)
-                .style('color', '#996600');
-            tooltip.append('br')
-
-            tooltip.append('span')
-                .classed('tooltip-text', true)
-                .text('Team Founded in: ')
-                .style('color', '#2A6592');
-            tooltip.append('span')
-                .classed('tooltip-text', true)
-                .text(year)
-                .style('color', '#996600');
-            tooltip.append('br')
-
-            tooltip.append('span')
-                .classed('tooltip-text', true)
-                .text('Number of Trophies: ')
-                .style('color', '#2A6592');
-            tooltip.append('span')
-                .classed('tooltip-text', true)
-                .text(trophies)
-                .style('color', '#996600');
-            tooltip.append('br')
-
-            tooltip.append('span')
-                .classed('tooltip-text', true)
-                .text('Most Prominent Player in History: ')
-                .style('color', '#2A6592');
-            tooltip.append('span')
-                .classed('tooltip-text', true)
-                .text(prom)
-                .style('color', '#996600');
-            tooltip.append('br')
-
-            tooltip.append('span')
-                .classed('tooltip-text', true)
-                .text('Fans Worldwide: ')
-                .style('color', '#2A6592');
-            tooltip.append('span')
-                .classed('tooltip-text', true)
-                .text(fans)
-                .style('color', '#996600');
-            tooltip.append('br')
         })
             .on("mouseout", function (d, i) {
 
                 if (selectedTeam.length == 0) {
-                    d3.selectAll('path')
+                    svg.selectAll('path')
                         .attr("stroke", function (d) {
                             if (d != null)
                                 return color(d.key);
                         })
                         .attr('opacity', 1)
+
+                    svg.selectAll('circle')
+                        .attr('stroke', 'red')
+                        .attr('opacity', 0.7)
+                        .attr("r", 5);
                 }
 
                 tooltip.transition()
@@ -281,11 +238,19 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                     .style('opacity', 0);
             });
 
-        svg.selectAll("myCircles")
+        let circles = svg.selectAll("myCircles")
             .data(pointsArray)
             .enter()
             .append("circle")
-            .attr("fill", "red")
+            .attr("fill", function (d) {
+                if (selectedTeam.length == 0)
+                    return 'red'
+                if (selectedTeam.length != 0 && selectedTeam.indexOf(d['Team']) > -1)
+                    return 'red'
+                else {
+                    return 'gray'
+                }
+            })
             .attr("stroke", "none")
             .attr("cx", function (d, i) {
                 if (d['Team'] == 'MI')
@@ -332,15 +297,117 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                     return y(+d[variable])
             })
             .attr("r", 5)
-            .attr('opacity', 0.7)
+
+        circles.transition()
+            .duration(6000)
+            .attr('opacity', function (d) {
+                if (selectedTeam.length == 0)
+                    return 0.7
+                if (selectedTeam.length != 0 && selectedTeam.indexOf(d['Team']) > -1)
+                    return 0.7
+                else {
+                    return 0.2
+                }
+            })
+
+        circles.on('mouseover', function (event, i) {
+            if (selectedTeam.length == 0) {
+                svg.selectAll('circle')
+                    .attr('stroke', 'gray')
+                    .attr('opacity', 0.2);
+
+                d3.select(this)
+                    .attr('stroke', 'red')
+                    .attr('opacity', 0.7)
+                    .attr("r", 8);
+                svg.selectAll('path')
+                    .attr('stroke', function (d) {
+                        if (d != null)
+                            return d.key == i['Team'] ? color(d.key) : 'gray'
+                    })
+                    .attr('opacity', function (d) {
+                        if (d != null)
+                            return d.key == i['Team'] ? 1 : 0.2
+                    });
+            }
+
+
+        }).on('mouseout', function (event, d) {
+            if (selectedTeam.length == 0) {
+                svg.selectAll('circle')
+                    .attr('stroke', 'red')
+                    .attr('opacity', 0.7)
+                    .attr("r", 5);
+                svg.selectAll('path')
+                    .attr('stroke', function (d) {
+                        if (d != null)
+                            return color(d.key)
+                    })
+                    .attr('opacity', 1)
+            }
+        })
             .on('mousedown', function (d, i) {
+
+                svg.selectAll('circle')
+                    .attr('stroke', 'gray')
+                    .attr('opacity', 0.2);
+
+                d3.select(this)
+                    .attr('stroke', 'red')
+                    .attr('opacity', 0.7)
+                    .attr("r", 8);
+
                 matchSelected = i['Match']
+
+                let teamOneMatchName = data2[matchSelected]['teamOne']
+
+                let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
+                let homeStadiums = ["M.A.Chidambaram Stadium", "Arun Jaitley Ground", "Narendra Modi Stadium", "Eden Gardens", "Shri Atal Bihari Vajpayee Ekana Cricket Stadium", "Wankhede Stadium", "PCA Stadium", "M.Chinnaswamy Stadium", "Sawai Mansingh Stadium", "Rajiv Gandhi International Cricket Stadium"]
+                let attendanceStadiums = ["48193", "32398", "38172", "42664", "34584", "52348", "30774", "45636", "34963", "44182"]
+
+                let totalRuns = 0
+                let totalWickets = 0
+                let totalExtras = 0
+
+                for (let i = 0; i < 20; i++) {
+                    totalRuns = totalRuns + data2[matchSelected]['matchScorecard'][i]['totalRunsOne'] + data2[matchSelected]['matchScorecard'][i]['totalRunsTwo']
+                    totalWickets = totalWickets + data2[matchSelected]['matchScorecard'][i]['wicketsOne'] + data2[matchSelected]['matchScorecard'][i]['wicketsTwo']
+                    totalExtras = totalExtras + data2[matchSelected]['matchScorecard'][i]['extraRunsOne'] + data2[matchSelected]['matchScorecard'][i]['extraRunsOne']
+                }
+
+                for (let i = 0; i < 10; i++) {
+                    if (teamOneMatchName == teamsNames[i]) {
+                        home = homeStadiums[i]
+                        attendance = attendanceStadiums[i]
+                    }
+                }
+
+                let iplData = document.querySelectorAll("h5")
+
+                iplData[5].innerText = "Venue: " + home
+                iplData[6].innerText = "Attendance: " + attendance
+                iplData[7].innerText = "Total Runs Scored: " + totalRuns
+                iplData[8].innerText = "Total Wickets Taken: " + totalWickets
+                iplData[9].innerText = "Total Extras: " + totalExtras
+
                 d3.selectAll("#scorecard > svg").remove();
                 d3.selectAll("#scorecard > select").remove();
                 d3.selectAll("#scorecard > span").remove();
                 d3.selectAll("#scorecard > br").remove();
                 render(data2)
             });
+
+        function tweenDash() {
+            const l = this.getTotalLength(),
+                i = d3.interpolateString("0," + l, l + "," + l);
+            return function (t) { return i(t) };
+        }
+        function transition(path) {
+            path.transition()
+                .duration(3500)
+                .attrTween("stroke-dasharray", tweenDash)
+                .on("end", () => { d3.select(this).call(transition); });
+        }
 
         svg.append("text")
             .attr("x", 300)

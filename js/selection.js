@@ -3,14 +3,17 @@ generateTeams = (selectedTeam) => {
     let teamSelected = ''
 
     let teamNames = ["CSK", "DC", "GT", "KKR", "LSG", "MI", "PK", "RCB", "RR", "SRH"]
-    let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
+    let teamColor = ["#FFFF00", "#191970", "#87CEEB", "#8B008B", "#00FFFF", "#0000FF", "#8B0000", "#ADFF2F", "#FF1493", "#FF8C00"]
 
     var margin = {
         top: 100,
         right: 50,
-        bottom: 50,
-        left: 100
+        left: 100,
+        bottom: 50
     }
+
+    let x = -50
+    let y = 130
 
     let width = 1500 - margin.left - margin.right;
     let height = 300 - margin.top - margin.bottom;
@@ -66,6 +69,25 @@ generateTeams = (selectedTeam) => {
         })
         .attr("stroke", '#FFD700')
         .attr('stroke-width', '4px');
+
+    let textArray = [
+        ['Chennai Super Kings', x, 150, x + 15, '#FFFF00'],
+        ['Delhi Capitals', x + 2 * y, 150, x + 2 * y + 15, '#191970'],
+        ['Gujarat Titans', x + 4 * y, 150, x + 4 * y + 15, '#87CEEB'],
+        ['Kolkata Knight Riders', x + 6 * y, 150, x + 6 * y + 15, '#8B008B'],
+        ['Lucknow Super Giants', x + 8 * y, 150, x + 8 * y + 15, '#00FFFF'],
+        ['Mumbai Indians', x, 180, x + 15, '#0000FF'],
+        ['Punjab Kings', x + 2 * y, 180, x + 2 * y + 15, '#8B0000'],
+        ['Royal Challengers Banglore', x + 4 * y, 180, x + 4 * y + 15, '#ADFF2F'],
+        ['Rajasthan Royals', x + 6 * y, 180, x + 6 * y + 15, '#FF1493'],
+        ['Sunrisers Hyderabad', x + 8 * y, 180, x + 8 * y + 15, '#FF8C00']
+    ]
+
+    for (let text in textArray) {
+        svg.append("circle").attr("cx", textArray[text][1]).attr("cy", textArray[text][2]).attr("r", 7).style("fill", `${textArray[text][4]}`)
+        svg.append("text").attr("x", textArray[text][3]).attr("y", textArray[text][2]).text(`${textArray[text][0]}`).style("font-size", "15px").attr("alignment-baseline", "middle")
+
+    }
 
     let cskImg = svg.append("g")
     cskImg.append("svg:image")

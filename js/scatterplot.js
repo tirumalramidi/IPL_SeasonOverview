@@ -105,7 +105,7 @@ generateScatterPlot = (data, selectedTeam) => {
 
         let shortNames = ["CSK", "DC", "GT", "KKR", "LSG", "MI", "PK", "RCB", "RR", "SRH"]
         let teamsNames = ["Chennai Super Kings", "Delhi Capitals", "Gujarat Titans", "Kolkata Knight Riders", "Lucknow Super Giants", "Mumbai Indians", "Punjab Kings", "Royal Challengers Bangalore", "Rajasthan Royals", "Sunrisers Hyderabad"]
-        let teamColors = ["#FFFF00", "#191970", "#87CEEB", "#4B0082", "#00FFFF", "#0000FF", "#FF0000", "#8B0000", "#FF1493", "#FF8C00"]
+        let teamColors = ["#FFFF00", "#191970", "#87CEEB", "#8B008B", "#00FFFF", "#0000FF", "#8B0000", "#ADFF2F", "#FF1493", "#FF8C00"]
 
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
@@ -191,9 +191,12 @@ generateScatterPlot = (data, selectedTeam) => {
             .attr("cy", function (d) {
                 return (yScale(d[xyData[varYSelected]]) == '' || isNaN(yScale(d[xyData[varYSelected]]))) ? null : yScale(d[xyData[varYSelected]]);
             })
-            .attr("r", 6.0)
+            .attr("r", function (d, i) {
+                let maxMatches = d['batMatches'] >= d['bowlMatches'] ? d['batMatches'] : d['bowlMatches']
+                return maxMatches
+            })
             .style("fill", function (d) { return color(d['team']) })
-            .style('stroke', 'black')
+            // .style('stroke', 'black')
             .style('opacity', 0);
 
         dots.transition()
@@ -215,11 +218,11 @@ generateScatterPlot = (data, selectedTeam) => {
             })
             .style('opacity', function (d) {
                 if (fullSelectedTeams.length == 0)
-                    return 1
+                    return 0.7
                 if (fullSelectedTeams.length != 0 && fullSelectedTeams.indexOf(d.team) > -1)
-                    return 1
+                    return 0.7
                 else {
-                    return 0.2
+                    return 0.1
                 }
             })
             .style('fill', function (d) {
@@ -310,12 +313,28 @@ generateScatterPlot = (data, selectedTeam) => {
                     })
                     .style('opacity', function (d) {
                         if (fullSelectedTeams.length == 0)
-                            return 1
+                            return 0.7
                         if (fullSelectedTeams.length != 0 && fullSelectedTeams.indexOf(d.team) > -1)
-                            return 1
+                            return 0.7
                         else {
-                            return 0.2
+                            return 0.1
                         }
+                    })
+                    .on('mousedown', function (d, i) {
+
+                        let iplData = document.querySelectorAll("h5")
+
+                        let totalRunsScored = i['runs'] != '' ? i['runs'] : 0
+                        let totalWicketsTaken = i['wicketsTaken'] != '' ? i['wicketsTaken'] : 0
+                        let highScores = i['highScore'] != '' ? i['highScore'] : 0
+
+                        iplData[10].innerText = "Player Name: " + i['player']
+                        iplData[11].innerText = "Team Name: " + i['team']
+                        iplData[12].innerText = "Price Bought: " + i['price']
+                        iplData[13].innerText = "Previous Team Name: " + i['previousTeam']
+                        iplData[14].innerText = "Total Runs: " + totalRunsScored
+                        iplData[15].innerText = "Total Wickets: " + totalWicketsTaken
+                        iplData[16].innerText = "High Score: " + highScores
                     });
 
                 tooltip.transition()
@@ -337,4 +356,45 @@ generateScatterPlot = (data, selectedTeam) => {
             .attr("class", "label")
             .text(newYData);
     }
+
+    const svg = d3.select("#scatterLegend")
+        .append("svg")
+        .attr("width", 150)
+        .attr("height", 300)
+
+    const size = d3.scaleSqrt()
+        .domain([1, 100])
+        .range([1, 100])
+
+    const valuesToShow = [1, 9, 18]
+    const xCircle = 40
+    const xLabel = 100
+    const yCircle = 220
+    svg.selectAll("legend")
+        .data(valuesToShow)
+        .join("circle")
+        .attr("cx", xCircle)
+        .attr("cy", d => yCircle - size(d))
+        .attr("r", d => size(d))
+        .style("fill", "none")
+        .attr("stroke", "black")
+
+    svg.selectAll("legend")
+        .data(valuesToShow)
+        .join("line")
+        .attr('x1', d => xCircle + size(d))
+        .attr('x2', xLabel)
+        .attr('y1', d => yCircle - size(d))
+        .attr('y2', d => yCircle - size(d))
+        .attr('stroke', 'black')
+        .style('stroke-dasharray', ('2,2'))
+
+    svg.selectAll("legend")
+        .data(valuesToShow)
+        .join("text")
+        .attr('x', xLabel)
+        .attr('y', d => yCircle - size(d))
+        .text(d => d)
+        .style("font-size", 10)
+        .attr('alignment-baseline', 'middle')
 }

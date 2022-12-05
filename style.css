@@ -1,11 +1,22 @@
 .tilesDivision {
     width: 1500px;
-    height: 300px;
+    height: 400px;
+}
+
+.infoDivision {
+    width: 1400px;
+    height: 125px;
+    padding-left: 2%;
+    padding-right: 5%;
 }
 
 .rowDivision {
     width: 1400px;
     height: 700px;
+}
+
+.textData {
+    padding: 5% 5% 5% 5%;
 }
 
 .csk {
