@@ -1,6 +1,6 @@
 let match = "74"
 
-render = (data2) => {
+generateScorecard = (data2) => {
 
     let selectSCData = [
         { "text": "Default" },

@@ -363,10 +363,10 @@ generateScatterPlot = (data, selectedTeam) => {
         .attr("height", 300)
 
     const size = d3.scaleSqrt()
-        .domain([1, 100])
-        .range([1, 100])
+        .domain([1, 36])
+        .range([1, 36])
 
-    const valuesToShow = [1, 9, 18]
+    const valuesToShow = [1, 18, 36]
     const xCircle = 40
     const xLabel = 100
     const yCircle = 220
@@ -377,7 +377,7 @@ generateScatterPlot = (data, selectedTeam) => {
         .attr("cy", d => yCircle - size(d))
         .attr("r", d => size(d))
         .style("fill", "none")
-        .attr("stroke", "black")
+        .attr("stroke", "black");
 
     svg.selectAll("legend")
         .data(valuesToShow)
@@ -387,7 +387,7 @@ generateScatterPlot = (data, selectedTeam) => {
         .attr('y1', d => yCircle - size(d))
         .attr('y2', d => yCircle - size(d))
         .attr('stroke', 'black')
-        .style('stroke-dasharray', ('2,2'))
+        .style('stroke-dasharray', ('2,2'));
 
     svg.selectAll("legend")
         .data(valuesToShow)
@@ -396,5 +396,13 @@ generateScatterPlot = (data, selectedTeam) => {
         .attr('y', d => yCircle - size(d))
         .text(d => d)
         .style("font-size", 10)
-        .attr('alignment-baseline', 'middle')
+        .attr('alignment-baseline', 'middle');
+
+    svg.append("text")
+        .attr("x", 0)
+        .attr("y", 133)
+        .attr("class", "title")
+        .text("Matches Played")
+        .style('font-size', 15)
+        .style('color', '#996600');
 }
