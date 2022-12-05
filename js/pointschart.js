@@ -1,4 +1,5 @@
 let matchSelected
+let nodeSelected = 'false'
 
 generatePoints = (data, data2, selectedTeam, pointsArray) => {
 
@@ -91,6 +92,8 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
 
         svg.append("g")
             .attr("transform", "translate(0," + height + ")")
+            .transition()
+            .duration(3000)
             .call(d3.axisBottom(x).ticks(10))
             .style("font-size", "12px");
 
@@ -118,6 +121,8 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
         }
 
         svg.append("g")
+            .transition()
+            .duration(3000)
             .call(d3.axisLeft(y))
             .style("font-size", "12px");
 
@@ -141,6 +146,7 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                     return 'gray'
                 }
             })
+            .call(transition)
             .attr("d", function (d) {
                 if (varSelect == -1) {
                     return d3.line()
@@ -166,7 +172,7 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                 }
             })
 
-        lines.on("mouseover", function (event, d) {
+        lines.on("mouseover", function (event, dd) {
 
             if (selectedTeam.length == 0) {
                 d3.selectAll('path')
@@ -174,8 +180,18 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                     .attr('opacity', 0.2);
 
                 d3.select(this)
-                    .attr('stroke', color(d.key))
+                    .attr('stroke', color(dd.key))
                     .attr('opacity', 1);
+
+                svg.selectAll('circle')
+                .attr('stroke', function (d) {
+                    if (d != null)
+                        return dd.key == d['Team'] ? 'red' : 'gray'
+                })
+                .attr('opacity', function (d) {
+                    if (d != null)
+                        return dd.key == d['Team'] ? 1 : 0.2
+                });
             }
 
             let shortNames = ["CSK", "DC", "GT", "KKR", "LSG", "MI", "PK", "RCB", "RR", "SRH"]
@@ -187,7 +203,7 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
             let promPlayer = ["MS Dhoni", "Virender Sehwag", "Hardik Pandya", "Gautham Gambhir", "KL Rahul", "Rohit Sharma", "Yuvraj Singh", "Virat Kohli", "Shane Warne", "David Warner"]
 
             for (let i = 0; i < 10; i++) {
-                if (d.key == shortNames[i]) {
+                if (dd.key == shortNames[i]) {
                     varTeam = teamsNames[i]
                     home = homeStadiums[i]
                     year = yearFounded[i]
@@ -200,7 +216,7 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
             tooltip.text("");
             tooltip.style("display", "block")
                 .transition().duration(200)
-                .style("opacity", 0.75);
+                .style("opacity", 0.95);
             tooltip.style('left', (event.pageX) + 'px')
                 .style('top', (event.pageY - 137) + 'px');
 
@@ -273,19 +289,32 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                                 return color(d.key);
                         })
                         .attr('opacity', 1)
+                        svg.selectAll('circle')
+                        .attr('stroke', 'red')
+                        .attr('opacity', 0.7)
+                        .attr("r", 5);
                 }
 
                 tooltip.transition()
                     .duration(500)
                     .on('end', () => tooltip.style('display', 'none'))
                     .style('opacity', 0);
+                   
             });
 
-        svg.selectAll("myCircles")
+        let circles = svg.selectAll("myCircles")
             .data(pointsArray)
             .enter()
             .append("circle")
-            .attr("fill", "red")
+            .attr("fill", function(d){
+                if (selectedTeam.length == 0)
+                    return 'red'
+                if (selectedTeam.length != 0 && selectedTeam.indexOf(d['Team']) > -1)
+                    return 'red'
+                else {
+                    return 'gray'
+                }
+            })
             .attr("stroke", "none")
             .attr("cx", function (d, i) {
                 if (d['Team'] == 'MI')
@@ -332,8 +361,67 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                     return y(+d[variable])
             })
             .attr("r", 5)
-            .attr('opacity', 0.7)
+            circles.transition()
+            .duration(6000)
+            .attr('opacity', function(d){
+                if (selectedTeam.length == 0)
+                    return 0.7
+                if (selectedTeam.length != 0 && selectedTeam.indexOf(d['Team']) > -1)
+                    return 0.7
+                else {
+                    return 0.2
+                }
+            })
+            circles
+            .on('mouseover', function (event, i) {
+                if(selectedTeam.length == 0){
+                svg.selectAll('circle')
+                    .attr('stroke', 'gray')
+                    .attr('opacity', 0.2);
+
+                d3.select(this)
+                    .attr('stroke', 'red')
+                    .attr('opacity', 0.7)
+                    .attr("r", 8);
+                svg.selectAll('path')
+                    .attr('stroke', function (d) {
+                        if (d != null)
+                            return d.key == i['Team'] ? color(d.key) : 'gray'
+                    })
+                    .attr('opacity', function (d) {
+                        if (d != null)
+                            return d.key == i['Team'] ? 1 : 0.2
+                    });
+                }
+
+
+            })
+            .on('mouseout', function (event, d) {
+                if(selectedTeam.length == 0){
+                    console.log("came")
+                svg.selectAll('circle')
+                    .attr('stroke', 'red')
+                    .attr('opacity', 0.7)
+                    .attr("r", 5);
+                svg.selectAll('path')
+                    .attr('stroke', function (d) {
+                        if (d != null)
+                            return color(d.key)
+                    })
+                    .attr('opacity',1)
+                }
+            })
             .on('mousedown', function (d, i) {
+
+                svg.selectAll('circle')
+                    .attr('stroke', 'gray')
+                    .attr('opacity', 0.2);
+
+                d3.select(this)
+                    .attr('stroke', 'red')
+                    .attr('opacity', 0.7)
+                    .attr("r", 8);
+
                 matchSelected = i['Match']
                 d3.selectAll("#scorecard > svg").remove();
                 d3.selectAll("#scorecard > select").remove();
@@ -341,6 +429,17 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                 d3.selectAll("#scorecard > br").remove();
                 render(data2)
             });
+        function tweenDash() {
+            const l = this.getTotalLength(),
+                i = d3.interpolateString("0," + l, l + "," + l);
+            return function(t) { return i(t) };
+            }
+        function transition(path) {
+            path.transition()
+                .duration(3500)
+                .attrTween("stroke-dasharray", tweenDash)
+                .on("end", () => { d3.select(this).call(transition); });
+            }
 
         svg.append("text")
             .attr("x", 300)
