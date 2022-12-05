@@ -90,7 +90,10 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
             .domain(d3.extent(data, function (d) { return +d.Matches; }))
             .range([0, width]);
 
-        svg.append("g")
+        var axisg = svg.append("g") //appends a new group for the axis
+            .attr("class", "axisg") //assign it a class
+
+        axisg.append("g")
             .attr("transform", "translate(0," + height + ")")
             .transition()
             .duration(3000)
@@ -98,6 +101,22 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
             .style("font-size", "12px");
 
         let y;
+
+        svg.append('line')
+        .style("stroke", "black")
+        .style("stroke-width", 2 )
+        .attr("x1", 0)
+        .attr("y1", 0)
+        .attr("x2", 0)
+        .attr("y2", 507); 
+
+        svg.append('line')
+        .style("stroke", "black")
+        .style("stroke-width", 2 )
+        .attr("x1", -7)
+        .attr("y1", 500)
+        .attr("x2", 701)
+        .attr("y2", 500); 
 
         if (variable == 'Position') {
             y = d3.scaleLinear()
@@ -120,7 +139,7 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                 .range([height, 0]);
         }
 
-        svg.append("g")
+        axisg.append("g")
             .transition()
             .duration(3000)
             .call(d3.axisLeft(y))
@@ -315,7 +334,7 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                 }
             })
 
-        circles.on('mouseover', function (event, i) {
+        circles.on('mouseover', function (event, dd) {
             if (selectedTeam.length == 0) {
                 svg.selectAll('circle')
                     .attr('stroke', 'gray')
@@ -328,11 +347,11 @@ generatePoints = (data, data2, selectedTeam, pointsArray) => {
                 svg.selectAll('path')
                     .attr('stroke', function (d) {
                         if (d != null)
-                            return d.key == i['Team'] ? color(d.key) : 'gray'
+                            return d.key == dd['Team'] ? color(d.key) : 'gray'
                     })
                     .attr('opacity', function (d) {
                         if (d != null)
-                            return d.key == i['Team'] ? 1 : 0.2
+                            return d.key == dd['Team'] ? 1 : 0.2
                     });
             }
 
